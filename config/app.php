@@ -108,6 +108,9 @@ return [
 
     'faker_locale' => 'en_US',
 
+    ////////////////
+    'force_https' => env('FORCE_HTTPS', false),
+
     /*
     |--------------------------------------------------------------------------
     | Encryption Key
