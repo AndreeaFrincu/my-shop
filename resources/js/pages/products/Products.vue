@@ -14,7 +14,8 @@ export default {
     name: "Products",
     components: {ProdFilterWrapper, NavBar},
     mounted() {
-        this.$store.dispatch('products/setProducts')
+        this.$store.dispatch('products/loadProducts')
+        this.$store.dispatch('products/loadGenres')
     },
     computed: {
         ...mapGetters({})

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import products from '../pages/products/store/store'
-import cart from '../pages/shopping-cart/store/store'
+import products from '../pages/products/store'
+import cart from '../pages/shopping-cart/store'
 import checkout from '../pages/checkout/store'
 
 Vue.use(Vuex)

@@ -6,24 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateOrderProductsTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('order_products', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->integer('product_price_id');
+            $table->integer('order_id');
+            $table->integer('quantity');
+            $table->date('buy_date');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('order_products');

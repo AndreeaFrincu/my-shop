@@ -1,5 +1,12 @@
-import store from "./store";
+import state from "./state";
+import mutations from "./mutations";
+import actions from "./actions";
+import getters from "./getters";
 
 export default {
-    store: store
+    namespaced: true,
+    state,
+    mutations,
+    actions,
+    getters
 }

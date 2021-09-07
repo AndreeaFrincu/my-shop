@@ -6,24 +6,14 @@ use Illuminate\Support\Facades\Schema;
 
 class CreatePricesTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('prices', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->float('price');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('prices');
