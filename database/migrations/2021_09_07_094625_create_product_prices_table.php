@@ -6,24 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateProductPricesTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('product_prices', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->integer('product_id');
+            $table->integer('price_id');
+            $table->date('start_date');
+            $table->date('end_date');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('product_prices');

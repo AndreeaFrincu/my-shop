@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\GenresController;
 use App\Http\Controllers\ProductsController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,4 +19,5 @@ use Illuminate\Support\Facades\Route;
 //    return $request->user();
 //});
 
-Route::get('/products', [ProductsController::class, 'getOne']);
+Route::get('/products', [ProductsController::class, 'getAll']);
+Route::get('/genres', [GenresController::class, 'getAll']);

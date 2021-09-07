@@ -7,5 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Authors extends Model
 {
+    use HasFactory;
     public $timestamps = false;
 }

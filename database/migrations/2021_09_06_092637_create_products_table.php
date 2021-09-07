@@ -15,12 +15,10 @@ class CreateProductsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('author');
-            $table->float('price');
-            $table->integer('quantity');
-            $table->integer('cartPosition');
             $table->integer('genre_id');
+            $table->integer('author_id');
+            $table->string('title');
+            $table->integer('cartPosition');
         });
     }
 

@@ -6,24 +6,14 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateGenresTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('genres', function (Blueprint $table) {
             $table->id();
-            $table->string('genre');
+            $table->string('name');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('genres');
