@@ -13,7 +13,7 @@ class GenresFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->randomElement([
+            'name' => $this->faker->unique()->randomElement([
                 'Historical Fiction', 'Comedy', 'Mystery', 'Supernatural', 'Fantasy',
                 'Science Fiction', 'Adventure', 'Dystopian', 'History', 'Thriller'])
         ];

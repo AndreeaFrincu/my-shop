@@ -1,18 +1,30 @@
-import axios from "axios";
+import Product from "../../../models/Product";
+import Genre from "../../../models/Genre";
+import ProductRepository from "../../../repositories/ProductRepository";
+import GenreRepository from "../../../repositories/GenreRepository";
 
 export default{
-    loadProducts({commit}) {
-        axios.get('http://my-shop.valet/api/products')
-            .then(response => {
-                console.log(response.data)
-                commit('setProducts', response.data)
-            })
+    async loadProducts({commit}) {
+        // axios.get('http://my-shop.valet/api/products')
+        //     .then(response => {
+        //         console.log(response.data)
+        //         commit('setProducts', response.data)
+        //     })
+
+
+        //const products = await new ProductRepository().fetchOne(1)
+        const products = await new ProductRepository(new Product()).fetchAll()
+        commit('setProducts', products)
     },
 
-    loadGenres({commit}) {
-        axios.get('http://my-shop.valet/api/genres')
-            .then(response => {
-                commit('setGenres', response.data)
-            })
+    async loadGenres({commit}) {
+        // axios.get('http://my-shop.valet/api/genres')
+        //     .then(response => {
+        //         commit('setGenres', response.data)
+        //     })
+
+        //const genres = await new GenreRepository().fetchOne(2)
+        const genres = await new GenreRepository(new Genre()).fetchAll()
+        commit('setGenres', genres)
     }
 }

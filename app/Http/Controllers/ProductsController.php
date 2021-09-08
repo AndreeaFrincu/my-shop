@@ -9,9 +9,32 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class ProductsController extends Controller
 {
-    public function getOne(Request $request)
+    public function getOne(): array
     {
-        dd('api');
+        return [
+            [
+                "id"=>1,
+                "title"=>"a",
+                "author"=>"auth1",
+                "price"=>27,
+                "quantity"=>1,
+                "cartPosition"=>0,
+                "genres"=>[
+                    [
+                        "id"=>1,
+                        "genre"=>"Historical Fiction"
+                    ],
+                    [
+                        "id"=>2,
+                        "genre"=>"Comedy"
+                    ],
+                    [
+                        "id"=>3,
+                        "genre"=>"Mystery"
+                    ],
+                ]
+            ]
+        ];
     }
 
     public function getAll(): array
@@ -146,6 +169,28 @@ class ProductsController extends Controller
                     [
                         "id"=> 2,
                         "genre"=> "Comedy"
+                    ]
+                ]
+            ],
+            [
+                "id"=> 7,
+                "title"=> "g",
+                "author"=> "auth7",
+                "price"=> 4,
+                "quantity"=> 1,
+                "cartPosition"=>0,
+                "genres"=> [
+                    [
+                        "id"=> 2,
+                        "genre"=> "Comedy"
+                    ],
+                    [
+                        "id"=> 3,
+                        "genre"=> "Mystery"
+                    ],
+                    [
+                        "id"=> 4,
+                        "genre"=> "Supernatural"
                     ]
                 ]
             ]

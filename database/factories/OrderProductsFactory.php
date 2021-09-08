@@ -12,9 +12,12 @@ class OrderProductsFactory extends Factory
 
     public function definition()
     {
+        $product_price_id = rand(1, 6);
+        $order_id = rand(1, 6);
+
         return [
-            'product_price_id' => $this->faker->numberBetween(1, 6),
-            'order_id' => $this->faker->numberBetween(1, 6),
+            'product_price_id' => $product_price_id,
+            'order_id' => $order_id,
             'quantity' => $this->faker->numberBetween(1, 20),
             'buy_date' => $this->faker->dateTimeThisMonth()
         ];

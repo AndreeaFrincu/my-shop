@@ -20,4 +20,7 @@ use Illuminate\Support\Facades\Route;
 //});
 
 Route::get('/products', [ProductsController::class, 'getAll']);
+Route::get('/products/{id}', [ProductsController::class, 'getOne'])->where('id', '[0-9]+');
 Route::get('/genres', [GenresController::class, 'getAll']);
+Route::get('/genres/{id}', [GenresController::class, 'getOne'])->where('id', '[0-9]+');
+
