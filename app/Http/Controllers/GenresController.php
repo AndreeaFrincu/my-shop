@@ -10,7 +10,12 @@ class GenresController extends Controller
 
     public function getOne()
     {
-
+        return [
+            [
+                "id"=> 2,
+                "genre"=> "Comedy"
+            ]
+        ];
     }
 
     public function getAll(): array
