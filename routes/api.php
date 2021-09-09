@@ -1,7 +1,9 @@
 <?php
 
-use App\Http\Controllers\GenresController;
-use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\AuthorController;
+use App\Http\Controllers\GenreController;
+use App\Http\Controllers\PriceController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,8 +21,17 @@ use Illuminate\Support\Facades\Route;
 //    return $request->user();
 //});
 
-Route::get('/products', [ProductsController::class, 'getAll']);
-Route::get('/products/{id}', [ProductsController::class, 'getOne'])->where('id', '[0-9]+');
-Route::get('/genres', [GenresController::class, 'getAll']);
-Route::get('/genres/{id}', [GenresController::class, 'getOne'])->where('id', '[0-9]+');
+Route::get('/products', [ProductController::class, 'getAll']);
+Route::get('/products/{id}', [ProductController::class, 'getOne'])->where('id', '[0-9]+');
+Route::delete('/products/{id}', [ProductController::class, 'delete'])->where('id', '[0-9]+');
 
+Route::get('/genres', [GenreController::class, 'getAll']);
+Route::get('/genres/{id}', [GenreController::class, 'getOne'])->where('id', '[0-9]+');
+Route::delete('/genres/{id}', [GenreController::class, 'delete'])->where('id', '[0-9]+');
+
+Route::get('/authors', [AuthorController::class, 'getAll']);
+Route::get('/authors/{id}', [AuthorController::class, 'getOne'])->where('id', '[0-9]+');
+Route::delete('/authors/{id}', [AuthorController::class, 'delete'])->where('id', '[0-9]+');
+
+Route::get('/prices', [PriceController::class, 'getAll']);
+Route::delete('/prices/{id}', [PriceController::class, 'delete'])->where('id', '[0-9]+');
