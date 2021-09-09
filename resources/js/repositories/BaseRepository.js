@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export default class BaseRepository {
     constructor(model) {
         if(model == null) {

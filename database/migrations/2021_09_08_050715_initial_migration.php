@@ -28,12 +28,11 @@ class InitialMigration extends Migration
             $table->integer('genre_id');
             $table->integer('author_id');
             $table->string('title');
-            $table->integer('cartPosition');
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('genre_id')->references('id')->on('genres');
-            $table->foreign('author_id')->references('id')->on('authors');
+            $table->foreign('genre_id')->references('id')->on('genres')->onDelete('cascade');
+            $table->foreign('author_id')->references('id')->on('authors')->onDelete('cascade');
         });
 
         Schema::create('prices', function (Blueprint $table) {

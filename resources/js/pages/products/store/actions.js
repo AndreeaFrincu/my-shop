@@ -2,12 +2,12 @@ import Product from "../../../models/Product";
 import Genre from "../../../models/Genre";
 import ProductRepository from "../../../repositories/ProductRepository";
 import GenreRepository from "../../../repositories/GenreRepository";
+import axios from "axios";
 
 export default{
     async loadProducts({commit}) {
         // axios.get('http://my-shop.valet/api/products')
         //     .then(response => {
-        //         console.log(response.data)
         //         commit('setProducts', response.data)
         //     })
 
