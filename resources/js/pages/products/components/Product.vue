@@ -1,7 +1,11 @@
 <template>
     <div class="prod">
         <md-content class="md-primary product-content">
-            <span id="prod-title">{{ product.title }}</span>
+            <div class="book-info">
+                <span class="book-info-text">title: {{ product.title }}</span>
+                <span class="book-info-text">author: {{ product.author.name }}</span>
+                <span class="book-info-text">genre: {{ product.genre.name }}</span>
+            </div>
             <md-button class="md-raised add-btn" @click="addProdToCart">
                 Add to cart
             </md-button>
@@ -29,7 +33,7 @@ export default {
     justify-content: flex-end;
 }
 
-.md-content {
+.product-content {
     width: 200px;
     height: 200px;
     display: flex;
@@ -38,9 +42,18 @@ export default {
     align-items: center;
 }
 
-.prod-controls {
+.book-info {
+    padding: 2px;
+    width: 100%;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.book-info-text {
+    width: 100%;
+    font-size: 12px;
+    display: flex;
 }
 
 .add-btn {

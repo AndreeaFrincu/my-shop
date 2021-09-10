@@ -31,8 +31,8 @@ class InitialMigration extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('genre_id')->references('id')->on('genres')->onDelete('cascade');
-            $table->foreign('author_id')->references('id')->on('authors')->onDelete('cascade');
+            $table->foreign('genre_id')->references('id')->on('genres');
+            $table->foreign('author_id')->references('id')->on('authors');
         });
 
         Schema::create('prices', function (Blueprint $table) {

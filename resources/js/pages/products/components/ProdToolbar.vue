@@ -21,6 +21,12 @@ export default {
     methods: {
         onSortBySelected(sortBy) {
             this.$store.commit('products/setSortBy', sortBy)
+            if(sortBy) {
+                this.$store.dispatch('products/sortProducts')
+            }
+            else {
+                this.$store.dispatch('products/loadProducts')
+            }
         },
         onPageSelected(perPage) {
             this.$store.commit('products/setPerPage', perPage)

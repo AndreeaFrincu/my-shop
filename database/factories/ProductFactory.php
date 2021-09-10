@@ -17,7 +17,10 @@ class ProductFactory extends Factory
         return [
             'genre_id' => $genre_id,
             'author_id' => $author_id,
-            'title' => $this->faker->unique()->firstName()
+            'title' => $this->faker->unique()->randomElement([
+                'Phantom with Wings', 'Castle of Dread', 'The Colossus in the Fog',
+                'The Beheaded Baker', 'Lucy Hand', 'Kingdom of Spades',
+                'Behemoth Grieving', 'Year of Pluto', 'Iron Alley', 'War of the Rose'])
         ];
     }
 }

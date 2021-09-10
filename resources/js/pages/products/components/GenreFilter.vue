@@ -2,7 +2,7 @@
     <div class="filter-content">
         <md-checkbox v-model="boolean"
                      class="md-primary" @change="filterProduct">
-            {{ genre.genre }}
+            {{ genre.name }}
         </md-checkbox>
     </div>
 </template>

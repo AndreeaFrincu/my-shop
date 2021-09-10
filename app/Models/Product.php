@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends BaseModel
 {
+    protected $with = ['author', 'genre'];
+
     protected $cascadeDeletes = ['productPrices'];
 
     public function productPrices(): HasMany
