@@ -29,7 +29,6 @@ class PriceController extends Controller
 
     public function delete(Request $request)
     {
-        return Price::where('id', $request->id)->delete();
         return Price::where('id', $request->id)->firstOrFail()->delete();
     }
 }

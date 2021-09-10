@@ -26,7 +26,7 @@ export default {
             {
                 id: 2,
                 name: 'Price (Ascending)',
-                value: '+price'
+                value: 'price'
             },
             {
                 id: 3,
@@ -36,7 +36,7 @@ export default {
             {
                 id: 4,
                 name: 'Alphabetic (Ascending)',
-                value: '+title'
+                value: 'title'
             },
             {
                 id: 5,

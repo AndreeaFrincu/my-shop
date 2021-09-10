@@ -39,10 +39,10 @@ export default {
             let asc = ' (Ascending)'
             let des = ' (Descending)'
             if (sortedByInfo) {
-                if (sortedByInfo[0] === '+') {
-                    sortedByText = sortedByInfo.split('+')
-                    sortedByText = (sortedByText[1].charAt(0).toUpperCase()) + sortedByText[1].slice(1).concat(asc)
-                } else if (sortedByInfo[0] === '-') {
+                sortedByText = sortedByInfo
+                sortedByText = (sortedByText.charAt(0).toUpperCase()) + sortedByText.slice(1).concat(asc)
+
+                if (sortedByInfo[0] === '-') {
                     sortedByText = sortedByInfo.split('-')
                     sortedByText = (sortedByText[1].charAt(0).toUpperCase()) + sortedByText[1].slice(1).concat(des)
                 }

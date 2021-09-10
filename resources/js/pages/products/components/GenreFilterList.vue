@@ -36,14 +36,14 @@ export default {
             let genreList = _.cloneDeep(this.$store.state.products.selectedGenreList)
             if (value) {
                 genreList.push(genre)
+                this.$store.dispatch('products/filterProducts')
             } else {
                 genreList = genreList.filter(item => item.id !== genre.id)
             }
             this.$store.commit('products/setSelectedGenreList', genreList)
         },
         isGenreSelected(targetGenre) {
-            const result = this.selectedGenres.some(item => item.id === targetGenre.id)
-            return result
+            return this.selectedGenres.some(item => item.id === targetGenre.id)
         }
     }
 }

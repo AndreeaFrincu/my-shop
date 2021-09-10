@@ -16,9 +16,6 @@ export default {
     mounted() {
         this.$store.dispatch('products/loadProducts')
         this.$store.dispatch('products/loadGenres')
-    },
-    computed: {
-        ...mapGetters({})
     }
 }
 </script>
