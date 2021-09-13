@@ -25,4 +25,9 @@ class Product extends BaseModel
     {
         return $this->belongsTo(Genre::class);
     }
+
+    public function scopeSearch($query, $search)
+    {
+        return $query->where("title","like","%".$search."%");
+    }
 }

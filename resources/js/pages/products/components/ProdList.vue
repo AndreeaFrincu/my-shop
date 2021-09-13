@@ -17,7 +17,7 @@ export default {
     components: {Product},
     computed: {
         ...mapGetters({
-            getProducts: 'products/getProductsPaginated'
+            getProducts: 'products/getProducts'
         })
     },
     methods: {
