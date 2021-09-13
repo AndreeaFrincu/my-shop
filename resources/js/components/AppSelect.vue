@@ -55,7 +55,7 @@ export default {
     methods: {
         selectedValue(event) {
             const selectedOption = this.options[event.target.selectedIndex]
-            console.log({selectedOption})
+            // console.log({selectedOption})
             this.$emit('input', selectedOption)
         },
         getOptionName(option) {

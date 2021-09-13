@@ -2592,10 +2592,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     selectedValue: function selectedValue(event) {
-      var selectedOption = this.options[event.target.selectedIndex];
-      console.log({
-        selectedOption: selectedOption
-      });
+      var selectedOption = this.options[event.target.selectedIndex]; // console.log({selectedOption})
+
       this.$emit('input', selectedOption);
     },
     getOptionName: function getOptionName(option) {
@@ -3082,7 +3080,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       if (value) {
         genreList.push(genre);
-        this.$store.dispatch('products/filterProducts');
       } else {
         genreList = genreList.filter(function (item) {
           return item.id !== genre.id;
@@ -3090,6 +3087,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       this.$store.commit('products/setSelectedGenreList', genreList);
+      this.$store.dispatch('products/filterProducts');
     },
     isGenreSelected: function isGenreSelected(targetGenre) {
       return this.selectedGenres.some(function (item) {
@@ -3137,6 +3135,7 @@ __webpack_require__.r(__webpack_exports__);
       });
       genreList.splice(removeIndex, 1);
       this.$store.commit('products/setSelectedGenreList', genreList);
+      this.$store.dispatch('products/filterProducts');
     }
   }
 });
@@ -3299,7 +3298,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     Product: _Product__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapGetters)({
-    getProducts: 'products/getProductsPaginated'
+    getProducts: 'products/getProducts'
   })),
   methods: {
     /** When 'Add to cart' is clicked */
@@ -3507,6 +3506,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     onPageSelected: function onPageSelected(perPage) {
       this.$store.commit('products/setPerPage', perPage);
+      this.$store.dispatch('products/paginateProducts');
     }
   },
   data: function data() {
@@ -3568,10 +3568,10 @@ __webpack_require__.r(__webpack_exports__);
       set: function set(value) {
         this.$store.commit('products/setPerPage', value);
       }
-    },
-    totalItems: function totalItems() {
-      return this.$store.getters['products/getProducts'].length;
-    }
+    } // totalItems() {
+    //     return this.$store.getters['products/getProducts'].length
+    // }
+
   }
 });
 
@@ -4278,11 +4278,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _repositories_ProductRepository__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../repositories/ProductRepository */ "./resources/js/repositories/ProductRepository.js");
 /* harmony import */ var _repositories_GenreRepository__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../repositories/GenreRepository */ "./resources/js/repositories/GenreRepository.js");
 /* harmony import */ var _state__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./state */ "./resources/js/pages/products/store/state.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_6__);
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 
 
 
@@ -4370,23 +4373,49 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             case 0:
               commit = _ref4.commit;
               _context4.next = 3;
-              return new _repositories_ProductRepository__WEBPACK_IMPORTED_MODULE_3__["default"](new _models_Product__WEBPACK_IMPORTED_MODULE_1__["default"]()).fetchProductByGenre(_state__WEBPACK_IMPORTED_MODULE_5__["default"].selectedGenreList.find(function (item) {
-                return item.id === 10;
-              }));
+              return new _repositories_ProductRepository__WEBPACK_IMPORTED_MODULE_3__["default"](new _models_Product__WEBPACK_IMPORTED_MODULE_1__["default"]()).fetchProductByGenre(_state__WEBPACK_IMPORTED_MODULE_5__["default"].selectedGenreList.map(function (obj) {
+                return obj.id;
+              }).toString());
 
             case 3:
               products = _context4.sent;
-              console.log(products);
               commit('setProducts', products);
 
-            case 6:
+            case 5:
             case "end":
               return _context4.stop();
           }
         }
       }, _callee4);
     }))();
-  }
+  },
+  paginateProducts: function paginateProducts(_ref5) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
+      var commit, products;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
+        while (1) {
+          switch (_context5.prev = _context5.next) {
+            case 0:
+              commit = _ref5.commit;
+              _context5.next = 3;
+              return new _repositories_ProductRepository__WEBPACK_IMPORTED_MODULE_3__["default"](new _models_Product__WEBPACK_IMPORTED_MODULE_1__["default"]()).fetchTable();
+
+            case 3:
+              products = _context5.sent;
+              console.log(products);
+              commit('setProducts', products);
+
+            case 6:
+            case "end":
+              return _context5.stop();
+          }
+        }
+      }, _callee5);
+    }))();
+  } // async sendPerPage() {
+  //     const posts = await Product.page(1).limit(20).get()
+  // }
+
 });
 
 /***/ }),
@@ -4752,6 +4781,34 @@ var BaseRepository = /*#__PURE__*/function () {
 
       return fetchOne;
     }()
+  }, {
+    key: "fetchTable",
+    value: function () {
+      var _fetchTable = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return this.model.page(1).limit(3).get();
+
+              case 2:
+                return _context3.abrupt("return", _context3.sent);
+
+              case 3:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
+      }));
+
+      function fetchTable() {
+        return _fetchTable.apply(this, arguments);
+      }
+
+      return fetchTable;
+    }()
   }]);
 
   return BaseRepository;
@@ -4869,9 +4926,12 @@ var ProductRepository = /*#__PURE__*/function (_BaseRepository) {
     }
   }, {
     key: "fetchProductByGenre",
-    value: function fetchProductByGenre(value) {
-      return _models_Product__WEBPACK_IMPORTED_MODULE_1__["default"].custom("products?filter[genre.name]=".concat(genre)).get();
-    }
+    value: function fetchProductByGenre(genreIds) {
+      return _models_Product__WEBPACK_IMPORTED_MODULE_1__["default"].custom("products?filter[genre_id]=".concat(genreIds)).get();
+    } // fetchProductsPaginated() {
+    //     return Product.custom(`products/table?page=1&limit=3`).get()
+    // }
+
   }]);
 
   return ProductRepository;
@@ -31848,7 +31908,7 @@ var render = function() {
       _c("prod-list"),
       _vm._v(" "),
       _c("app-paginator", {
-        attrs: { "per-page": _vm.perPage, "total-items": _vm.totalItems },
+        attrs: { "per-page": _vm.perPage },
         model: {
           value: _vm.currentPage,
           callback: function($$v) {

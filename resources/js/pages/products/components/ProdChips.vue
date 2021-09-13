@@ -19,6 +19,7 @@ export default {
             genreList.splice(removeIndex, 1)
 
             this.$store.commit('products/setSelectedGenreList', genreList)
+            this.$store.dispatch('products/filterProducts')
         }
     }
 }

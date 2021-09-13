@@ -15,4 +15,8 @@ export default class BaseRepository {
     async fetchOne(id) {
         return await this.model.find(id)
     }
+
+    async fetchTable() {
+        return await this.model.page(1).limit(3).get()
+    }
 }

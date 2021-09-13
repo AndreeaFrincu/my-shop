@@ -30,6 +30,7 @@ export default {
         },
         onPageSelected(perPage) {
             this.$store.commit('products/setPerPage', perPage)
+            this.$store.dispatch('products/paginateProducts')
         }
     },
     data: () => ({})
