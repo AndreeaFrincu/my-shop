@@ -5,7 +5,7 @@
         </div>
         <md-divider class="page-divider"></md-divider>
         <paginate
-            v-model="value"
+            v-model="computedValue"
             :clickHandler="changePage"
             :containerClass="'pagination'"
             :page-class="'page-item'"
@@ -38,11 +38,21 @@ export default {
         },
         lastItem() {
             return this.perPage * this.$store.state.products.currentPage
+        },
+        computedValue: {
+            get() {
+                return this.value
+            },
+            set(value) {
+                this.$store.commit('products/setCurrentPage', value)
+            }
         }
     },
     methods: {
         changePage(currentPage) {
-            this.$emit('input', currentPage)
+            // console.log(currentPage)
+            // this.$emit('input', currentPage)
+            this.$store.dispatch('products/sendPerPage');
         }
     }
 }

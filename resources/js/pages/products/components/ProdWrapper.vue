@@ -5,7 +5,7 @@
         <app-paginator
             v-model="currentPage"
             :per-page="perPage"
-
+            :total-items="totalItems"
         ></app-paginator>
     </div>
 </template>
@@ -35,9 +35,9 @@ export default {
                 this.$store.commit('products/setPerPage', value)
             }
         },
-        // totalItems() {
-        //     return this.$store.getters['products/getProducts'].length
-        // }
+        totalItems() {
+            return this.$store.getters['products/getTotalProducts'].length
+        }
     }
 }
 

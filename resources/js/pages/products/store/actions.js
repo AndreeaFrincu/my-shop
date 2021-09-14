@@ -3,28 +3,32 @@ import Genre from "../../../models/Genre";
 import ProductRepository from "../../../repositories/ProductRepository";
 import GenreRepository from "../../../repositories/GenreRepository";
 import state from "./state";
-import axios from "axios";
 
 export default{
     async loadProducts({commit}) {
-        //const products = await new ProductRepository().fetchOne(1)
         const products = await new ProductRepository(new Product())
             .fetchAll()
-        // console.log(products)
+
+        /** To find out how many products I have in total
+         * For pagination */
+        commit('setTotalProducts', products)
         commit('setProducts', products)
+
+        /** Initial perPage = all products */
+        commit('setPerPage', products.length)
     },
 
     async loadGenres({commit}) {
-        //const genres = await new GenreRepository().fetchOne(2)
         const genres = await new GenreRepository(new Genre())
             .fetchAll()
-        // console.log(genres)
+
         commit('setGenres', genres)
     },
 
     async sortProducts({commit}) {
         const products = await new ProductRepository(new Product())
             .fetchProductsByTitle(state.sortBy)
+
         commit('setProducts', products)
     },
 
@@ -36,15 +40,10 @@ export default{
         commit('setProducts', products)
     },
 
-    async paginateProducts({commit}) {
+    async sendPerPage({commit}) {
         const products = await new ProductRepository(new Product())
-            .fetchTable()
+            .fetchTable(state.currentPage, state.perPage)
 
-        console.log(products)
-        commit('setProducts', products)
-    },
-
-    // async sendPerPage() {
-    //     const posts = await Product.page(1).limit(20).get()
-    // }
+        commit('setProducts', products.data)
+    }
 }

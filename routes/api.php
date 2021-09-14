@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Route;
 //});
 
 Route::get('/products', [ProductController::class, 'getAll']);
+Route::post('/products', [ProductController::class, 'create']);
 Route::get('/products/table', [ProductController::class, 'getTable']);
 Route::get('/products/{id}', [ProductController::class, 'getOne'])->where('id', '[0-9]+');
 Route::delete('/products/{id}', [ProductController::class, 'delete'])->where('id', '[0-9]+');

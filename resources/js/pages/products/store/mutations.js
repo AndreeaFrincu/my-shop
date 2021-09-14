@@ -1,4 +1,7 @@
 export default {
+    setTotalProducts(state, value) {
+        state.totalProducts = value
+    },
     setProducts(state, value) {
         state.productsList = value
     },
