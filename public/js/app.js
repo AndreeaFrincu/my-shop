@@ -2510,11 +2510,21 @@ __webpack_require__.r(__webpack_exports__);
     },
     lastItem: function lastItem() {
       return this.perPage * this.$store.state.products.currentPage;
+    },
+    computedValue: {
+      get: function get() {
+        return this.value;
+      },
+      set: function set(value) {
+        this.$store.commit('products/setCurrentPage', value);
+      }
     }
   },
   methods: {
     changePage: function changePage(currentPage) {
-      this.$emit('input', currentPage);
+      // console.log(currentPage)
+      // this.$emit('input', currentPage)
+      this.$store.dispatch('products/sendPerPage');
     }
   }
 });
@@ -3506,7 +3516,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     onPageSelected: function onPageSelected(perPage) {
       this.$store.commit('products/setPerPage', perPage);
-      this.$store.dispatch('products/paginateProducts');
+      this.$store.dispatch('products/sendPerPage');
     }
   },
   data: function data() {
@@ -3568,10 +3578,10 @@ __webpack_require__.r(__webpack_exports__);
       set: function set(value) {
         this.$store.commit('products/setPerPage', value);
       }
-    } // totalItems() {
-    //     return this.$store.getters['products/getProducts'].length
-    // }
-
+    },
+    totalItems: function totalItems() {
+      return this.$store.getters['products/getTotalProducts'].length;
+    }
   }
 });
 
@@ -4278,14 +4288,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _repositories_ProductRepository__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../repositories/ProductRepository */ "./resources/js/repositories/ProductRepository.js");
 /* harmony import */ var _repositories_GenreRepository__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../repositories/GenreRepository */ "./resources/js/repositories/GenreRepository.js");
 /* harmony import */ var _state__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./state */ "./resources/js/pages/products/store/state.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_6__);
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 
 
 
@@ -4306,10 +4313,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
             case 3:
               products = _context.sent;
-              // console.log(products)
-              commit('setProducts', products);
 
-            case 5:
+              /** To find out how many products I have in total
+               * For pagination */
+              commit('setTotalProducts', products);
+              commit('setProducts', products);
+              /** Initial perPage = all products */
+
+              commit('setPerPage', products.length);
+
+            case 7:
             case "end":
               return _context.stop();
           }
@@ -4330,7 +4343,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
             case 3:
               genres = _context2.sent;
-              // console.log(genres)
               commit('setGenres', genres);
 
             case 5:
@@ -4389,7 +4401,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, _callee4);
     }))();
   },
-  paginateProducts: function paginateProducts(_ref5) {
+  sendPerPage: function sendPerPage(_ref5) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
       var commit, products;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
@@ -4398,24 +4410,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             case 0:
               commit = _ref5.commit;
               _context5.next = 3;
-              return new _repositories_ProductRepository__WEBPACK_IMPORTED_MODULE_3__["default"](new _models_Product__WEBPACK_IMPORTED_MODULE_1__["default"]()).fetchTable();
+              return new _repositories_ProductRepository__WEBPACK_IMPORTED_MODULE_3__["default"](new _models_Product__WEBPACK_IMPORTED_MODULE_1__["default"]()).fetchTable(_state__WEBPACK_IMPORTED_MODULE_5__["default"].currentPage, _state__WEBPACK_IMPORTED_MODULE_5__["default"].perPage);
 
             case 3:
               products = _context5.sent;
-              console.log(products);
-              commit('setProducts', products);
+              commit('setProducts', products.data);
 
-            case 6:
+            case 5:
             case "end":
               return _context5.stop();
           }
         }
       }, _callee5);
     }))();
-  } // async sendPerPage() {
-  //     const posts = await Product.page(1).limit(20).get()
-  // }
-
+  }
 });
 
 /***/ }),
@@ -4435,14 +4443,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  getProductsPaginated: function getProductsPaginated(state, getters) {
-    var result = getters['getProducts']; // paginate
-
-    if (state.perPage) {
-      result = result.slice((state.currentPage - 1) * state.perPage, state.currentPage * state.perPage);
-    }
-
-    return result;
+  getTotalProducts: function getTotalProducts(state) {
+    return state.totalProducts;
   },
   getProducts: function getProducts(state) {
     return state.productsList;
@@ -4500,6 +4502,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  setTotalProducts: function setTotalProducts(state, value) {
+    state.totalProducts = value;
+  },
   setProducts: function setProducts(state, value) {
     state.productsList = value;
   },
@@ -4534,6 +4539,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  totalProducts: [],
   productsList: [],
   genresList: [],
   selectedGenreList: [],
@@ -4700,6 +4706,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _models_Product__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../models/Product */ "./resources/js/models/Product.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -4711,6 +4718,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 
 
 
@@ -4780,35 +4788,11 @@ var BaseRepository = /*#__PURE__*/function () {
       }
 
       return fetchOne;
-    }()
-  }, {
-    key: "fetchTable",
-    value: function () {
-      var _fetchTable = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.next = 2;
-                return this.model.page(1).limit(3).get();
+    }() //
+    // async fetchTable() {
+    //     return await this.model.page(1).limit(2).get()
+    // }
 
-              case 2:
-                return _context3.abrupt("return", _context3.sent);
-
-              case 3:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3, this);
-      }));
-
-      function fetchTable() {
-        return _fetchTable.apply(this, arguments);
-      }
-
-      return fetchTable;
-    }()
   }]);
 
   return BaseRepository;
@@ -4883,6 +4867,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _BaseRepository__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./BaseRepository */ "./resources/js/repositories/BaseRepository.js");
 /* harmony import */ var _models_Product__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../models/Product */ "./resources/js/models/Product.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -4908,6 +4894,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
+
 var ProductRepository = /*#__PURE__*/function (_BaseRepository) {
   _inherits(ProductRepository, _BaseRepository);
 
@@ -4928,10 +4915,16 @@ var ProductRepository = /*#__PURE__*/function (_BaseRepository) {
     key: "fetchProductByGenre",
     value: function fetchProductByGenre(genreIds) {
       return _models_Product__WEBPACK_IMPORTED_MODULE_1__["default"].custom("products?filter[genre_id]=".concat(genreIds)).get();
-    } // fetchProductsPaginated() {
-    //     return Product.custom(`products/table?page=1&limit=3`).get()
-    // }
+    }
+  }, {
+    key: "fetchTable",
+    value: function fetchTable(currentPage, perPage) {
+      if (perPage === 'Default') {
+        perPage = '';
+      }
 
+      return _models_Product__WEBPACK_IMPORTED_MODULE_1__["default"].custom("products/table?page=".concat(currentPage, "&limit=").concat(perPage)).get();
+    }
   }]);
 
   return ProductRepository;
@@ -30938,11 +30931,11 @@ var render = function() {
           pageCount: _vm.totalPages
         },
         model: {
-          value: _vm.value,
+          value: _vm.computedValue,
           callback: function($$v) {
-            _vm.value = $$v
+            _vm.computedValue = $$v
           },
-          expression: "value"
+          expression: "computedValue"
         }
       })
     ],
@@ -31908,7 +31901,7 @@ var render = function() {
       _c("prod-list"),
       _vm._v(" "),
       _c("app-paginator", {
-        attrs: { "per-page": _vm.perPage },
+        attrs: { "per-page": _vm.perPage, "total-items": _vm.totalItems },
         model: {
           value: _vm.currentPage,
           callback: function($$v) {

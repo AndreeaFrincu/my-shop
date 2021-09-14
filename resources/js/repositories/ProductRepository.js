@@ -1,5 +1,6 @@
 import BaseRepository from './BaseRepository'
-import Product from "../models/Product";
+import Product from "../models/Product"
+import axios from 'axios'
 
 export default class ProductRepository extends BaseRepository {
     constructor() {
@@ -14,7 +15,10 @@ export default class ProductRepository extends BaseRepository {
         return Product.custom(`products?filter[genre_id]=${genreIds}`).get()
     }
 
-    // fetchProductsPaginated() {
-    //     return Product.custom(`products/table?page=1&limit=3`).get()
-    // }
+    fetchTable(currentPage, perPage){
+        if(perPage === 'Default') {
+            perPage = '';
+        }
+        return Product.custom(`products/table?page=${currentPage}&limit=${perPage}`).get()
+    }
 }

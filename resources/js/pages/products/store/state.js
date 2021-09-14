@@ -1,4 +1,5 @@
 export default {
+    totalProducts: [],
     productsList: [],
     genresList: [],
     selectedGenreList: [],

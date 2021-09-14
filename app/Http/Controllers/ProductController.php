@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use http\QueryString;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Log;
+use phpDocumentor\Reflection\Types\Integer;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -21,7 +21,8 @@ class ProductController extends Controller
         return QueryBuilder::for(Product::class)
             ->allowedFilters([
                 AllowedFilter::exact('genre_id'),
-                AllowedFilter::scope('search')
+                AllowedFilter::scope('search'),
+                AllowedFilter::trashed()
             ])
             ->allowedSorts('title')
             ->get();
@@ -29,10 +30,9 @@ class ProductController extends Controller
 
     public function getTable(Request $request)
     {
-        $perPage = response()->has('limit');
-
+        $limit = $request->limit ?? 5;
         return QueryBuilder::for(Product::class)
-            ->paginate($perPage);
+            ->paginate($limit);
     }
 
     public function update()
@@ -40,9 +40,9 @@ class ProductController extends Controller
 
     }
 
-    public function create()
+    public function create(Request $request)
     {
-
+        return $request->perPage;
     }
 
     public function delete(Request $request)
