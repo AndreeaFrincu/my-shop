@@ -26,10 +26,15 @@ export default{
     },
 
     async sortProducts({commit}) {
-        const products = await new ProductRepository(new Product())
-            .fetchProductsByTitle(state.sortBy)
+        if(state.sortBy.includes('title')) {
+            const products = await new ProductRepository(new Product())
+                .fetchProductsByTitle(state.sortBy)
 
-        commit('setProducts', products)
+            commit('setProducts', products)
+        }
+        else if(state.sortBy.includes('price')){
+
+        }
     },
 
     async filterProducts({commit}) {

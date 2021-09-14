@@ -13,11 +13,12 @@ class ProductPriceFactory extends Factory
     public function definition()
     {
         $product_id = rand(1, 6);
-        $price_id = rand(1, 6);
 
         return [
             'product_id' => $product_id,
-            'price_id' => $price_id,
+            'price_id' => $this->faker->unique()->randomElement([
+                '1', '2', '3', '4', '5', '6'
+            ]),
             'start_date' => $this->faker->dateTimeThisYear(),
             'end_date' => $this->faker->dateTimeThisMonth()
         ];

@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\PriceController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductPriceController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,7 +23,6 @@ use Illuminate\Support\Facades\Route;
 //});
 
 Route::get('/products', [ProductController::class, 'getAll']);
-Route::post('/products', [ProductController::class, 'create']);
 Route::get('/products/table', [ProductController::class, 'getTable']);
 Route::get('/products/{id}', [ProductController::class, 'getOne'])->where('id', '[0-9]+');
 Route::delete('/products/{id}', [ProductController::class, 'delete'])->where('id', '[0-9]+');
@@ -37,3 +37,5 @@ Route::delete('/authors/{id}', [AuthorController::class, 'delete'])->where('id',
 
 Route::get('/prices', [PriceController::class, 'getAll']);
 Route::delete('/prices/{id}', [PriceController::class, 'delete'])->where('id', '[0-9]+');
+
+Route::get('/product_prices', [ProductPriceController::class, 'getAll']);

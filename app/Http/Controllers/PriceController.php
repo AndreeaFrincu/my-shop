@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Price;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class PriceController extends Controller
 {
@@ -14,7 +16,10 @@ class PriceController extends Controller
 
     public function getAll()
     {
-        return Price::with('productPrices')->get();
+        return QueryBuilder::for(Price::class)
+            ->with('product_prices')
+            ->allowedSorts('price')
+            ->get();
     }
 
     public function update()
