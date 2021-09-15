@@ -2,18 +2,19 @@
 
 namespace Database\Factories;
 
-use App\Models\Price;
+use App\Models\Cart;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class PriceFactory extends Factory
+class CartFactory extends Factory
 {
-
-    protected $model = Price::class;
+    protected $model = Cart::class;
 
     public function definition()
     {
+        $user_id = rand(1, 3);
+
         return [
-            'price' => $this->faker->randomFloat()
+            'user_id' => $user_id
         ];
     }
 }

@@ -1,5 +1,5 @@
 export default {
-    setItems({commit}) {
+    fetchCart({commit}) {
 
     }
 }

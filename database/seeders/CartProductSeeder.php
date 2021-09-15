@@ -2,13 +2,13 @@
 
 namespace Database\Seeders;
 
-use App\Models\Price;
+use App\Models\CartProduct;
 use Illuminate\Database\Seeder;
 
-class PriceSeeder extends Seeder
+class CartProductSeeder extends Seeder
 {
     public function run()
     {
-        Price::factory(6)->create();
+        CartProduct::factory(20)->create();
     }
 }

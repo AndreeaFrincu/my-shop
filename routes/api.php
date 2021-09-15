@@ -35,7 +35,4 @@ Route::get('/authors', [AuthorController::class, 'getAll']);
 Route::get('/authors/{id}', [AuthorController::class, 'getOne'])->where('id', '[0-9]+');
 Route::delete('/authors/{id}', [AuthorController::class, 'delete'])->where('id', '[0-9]+');
 
-Route::get('/prices', [PriceController::class, 'getAll']);
-Route::delete('/prices/{id}', [PriceController::class, 'delete'])->where('id', '[0-9]+');
-
 Route::get('/product_prices', [ProductPriceController::class, 'getAll']);

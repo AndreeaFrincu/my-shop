@@ -10,6 +10,10 @@ export default class ProductRepository extends BaseRepository {
         return Product.custom(`products?sort=${value}`).get()
     }
 
+    fetchProductsByPrice(value) {
+        return Product.custom(`products?sort=${value}`).get()
+    }
+
     fetchProductByGenre(genreIds) {
         return Product.custom(`products?filter[genre_id]=${genreIds}`).get()
     }

@@ -17,12 +17,14 @@ class ProductController extends Controller
     public function getAll(Request $request)
     {
         return QueryBuilder::for(Product::class)
+            ->join('product_prices', 'products.id',
+                '=', 'product_prices.product_id')
             ->allowedFilters([
                 AllowedFilter::exact('genre_id'),
                 AllowedFilter::scope('search'),
                 AllowedFilter::trashed()
             ])
-            ->allowedSorts('title')
+            ->allowedSorts('title', 'price')
             ->get();
     }
 

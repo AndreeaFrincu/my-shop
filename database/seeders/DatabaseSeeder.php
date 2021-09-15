@@ -12,10 +12,11 @@ class DatabaseSeeder extends Seeder
             AuthorSeeder::class,
             GenreSeeder::class,
             ProductSeeder::class,
-            PriceSeeder::class,
-            ProductPriceSeeder::class,
             UserSeeder::class,
             OrderSeeder::class,
+            CartSeeder::class,
+            ProductPriceSeeder::class,
+            CartProductSeeder::class,
             OrderProductSeeder::class]);
     }
 }
