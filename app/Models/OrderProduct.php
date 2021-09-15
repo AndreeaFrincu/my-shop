@@ -14,6 +14,6 @@ class OrderProduct extends BaseModel
 
     public function order(): BelongsTo
     {
-        return $this->belongsTo(Genre::class, 'order_id');
+        return $this->belongsTo(Genre::class);
     }
 }

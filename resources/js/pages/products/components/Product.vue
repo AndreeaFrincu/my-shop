@@ -5,6 +5,7 @@
                 <span class="book-info-text">title: {{ product.title }}</span>
                 <span class="book-info-text">author: {{ product.author.name }}</span>
                 <span class="book-info-text">genre: {{ product.genre.name }}</span>
+                <span class="book-info-text">price: {{ product.price }}</span>
             </div>
             <md-button class="md-raised add-btn" @click="addProdToCart">
                 Add to cart

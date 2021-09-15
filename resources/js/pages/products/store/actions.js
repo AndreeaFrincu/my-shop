@@ -33,7 +33,10 @@ export default{
             commit('setProducts', products)
         }
         else if(state.sortBy.includes('price')){
+            const products = await new ProductRepository(new Product())
+                .fetchProductsByPrice(state.sortBy)
 
+            commit('setProducts', products)
         }
     },
 

@@ -9,11 +9,16 @@ class Product extends BaseModel
 {
     protected $with = ['author', 'genre'];
 
-    protected $cascadeDeletes = ['productPrices'];
+    protected $cascadeDeletes = ['productPrices', 'cartProducts'];
 
     public function productPrices(): HasMany
     {
         return $this->hasMany(ProductPrice::class);
+    }
+
+    public function cartProducts(): HasMany
+    {
+        return $this->hasMany(CartProduct::class);
     }
 
     public function author(): BelongsTo
