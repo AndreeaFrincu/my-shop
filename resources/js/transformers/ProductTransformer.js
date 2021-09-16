@@ -7,9 +7,13 @@ export default class productTransformer extends apiTransformer{
         }
     }
 
+    // static transformToApi(item) {
+    //     return {
+    //         "id":_.get(item, 'id', null)
+    //     }
+    // }
+
     static transformToApi(item) {
-        return {
-            "id":_.get(item, 'id', null)
-        }
+        return item.replace( /([A-Z])/g, "_$1" ).toLowerCase();
     }
 }

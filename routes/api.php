@@ -5,6 +5,7 @@ use App\Http\Controllers\GenreController;
 use App\Http\Controllers\PriceController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductPriceController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -36,3 +37,5 @@ Route::get('/authors/{id}', [AuthorController::class, 'getOne'])->where('id', '[
 Route::delete('/authors/{id}', [AuthorController::class, 'delete'])->where('id', '[0-9]+');
 
 Route::get('/product_prices', [ProductPriceController::class, 'getAll']);
+
+Route::post('/users', [UserController::class, 'create']);

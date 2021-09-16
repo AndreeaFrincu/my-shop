@@ -4,19 +4,17 @@
             <md-field>
                 <label>Username or Email</label>
                 <md-input
-                    type="text"
-                    v-model="type"></md-input>
+                    type="text"></md-input>
             </md-field>
 
             <md-field>
                 <label>Password</label>
                 <md-input
-                    type="password"
-                    v-model="type"></md-input>
+                    type="password"></md-input>
             </md-field>
         </div>
 
-        <md-button class="md-raised md-primary">Register</md-button>
+        <md-button class="md-raised md-primary">Login</md-button>
     </div>
 </template>
 

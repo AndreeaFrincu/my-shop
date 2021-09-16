@@ -2,12 +2,16 @@
     <div class="auth-content">
         <md-card class="auth-card">
             <md-tabs md-alignment="centered">
-                <md-tab id="tab-home" md-label="Register"></md-tab>
-                <md-tab id="tab-pages" md-label="Login"></md-tab>
+                <md-tab id="tab-home" md-label="Register"
+                        @click="selected = tabs[0]"></md-tab>
+                <md-tab id="tab-pages" md-label="Login"
+                        @click="selected = tabs[1]"></md-tab>
             </md-tabs>
 
-            <register></register>
-<!--            <login></login>-->
+            <div class="reg-or-log">
+                <component :is="selected">
+                </component>
+            </div>
         </md-card>
     </div>
 </template>
@@ -17,14 +21,17 @@ import Register from "./Register";
 import Login from "./Login";
 export default {
     name: "AuthenticationMethod",
-    components: {Login, Register}
+    components: {Login, Register},
+    data: () => ({
+        tabs: ['register', 'login'],
+        selected: 'register'
+    })
 }
 </script>
 
 <style scoped>
 
 .auth-content {
-    width: 100%;
     display: flex;
     justify-content: center;
 }
