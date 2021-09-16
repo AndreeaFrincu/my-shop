@@ -21,9 +21,9 @@ class UserController extends Controller
 
     }
 
-    public function create()
+    public function create(Request $request)
     {
-
+        return $request->username;
     }
 
     public function delete()
