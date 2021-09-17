@@ -1,18 +1,14 @@
 import UserRepository from "../../../repositories/UserRepository";
 import User from "../../../models/User";
-import productTransformer from "../../../transformers/ProductTransformer";
 import state from "./state";
+import {userTransformer} from "../../../transformers/UserTransformer";
 
 export default {
     async loadCurrentUser({commit}, form) {
         commit('setCurrentUser', form)
 
-        var newObj = {}
-        for(var camel in state.currentUser) {
-            newObj[productTransformer.transformToApi(camel)] = state.currentUser[camel]
-        }
-
-        console.log('bla bla', newObj)
+        state.currentUser = userTransformer.transformFromApi(state.currentUser)
+        console.log('verify', state.currentUser)
     },
 
     async postUser() {

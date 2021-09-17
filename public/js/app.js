@@ -2973,6 +2973,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -2982,15 +2983,18 @@ __webpack_require__.r(__webpack_exports__);
     form: {
       firstName: {
         required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__.required,
-        minLength: (0,vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__.minLength)(3)
+        minLength: (0,vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__.minLength)(3),
+        maxLength: (0,vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__.maxLength)(35)
       },
       lastName: {
         required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__.required,
-        minLength: (0,vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__.minLength)(3)
+        minLength: (0,vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__.minLength)(3),
+        maxLength: (0,vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__.maxLength)(35)
       },
       username: {
         required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__.required,
-        minLength: (0,vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__.minLength)(8)
+        minLength: (0,vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__.minLength)(6),
+        maxLength: (0,vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__.maxLength)(20)
       },
       email: {
         required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__.required,
@@ -3004,7 +3008,10 @@ __webpack_require__.r(__webpack_exports__);
       },
       confirmPassword: {
         required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__.required,
-        sameAsPassword: (0,vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__.sameAs)('password')
+        sameAsPassword: (0,vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__.sameAs)('password'),
+        valid: function valid(value) {
+          return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/.test(value);
+        }
       }
     }
   },
@@ -3057,11 +3064,10 @@ __webpack_require__.r(__webpack_exports__);
     validateUser: function validateUser() {
       this.$v.$touch();
 
-      if (this.$v.$invalid) {// console.log('invalid', this.userSaved)
-      } else if (!this.$v.$invalid) {
+      if (!this.$v.$invalid) {
         this.saveUser();
         this.$store.dispatch('auth/loadCurrentUser', this.form);
-        this.$store.dispatch('auth/postUser'); // console.log('valid', this.userSaved)
+        this.$store.dispatch('auth/postUser');
       }
     }
   }
@@ -4555,8 +4561,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _repositories_UserRepository__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../repositories/UserRepository */ "./resources/js/repositories/UserRepository.js");
 /* harmony import */ var _models_User__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../models/User */ "./resources/js/models/User.js");
-/* harmony import */ var _transformers_ProductTransformer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../transformers/ProductTransformer */ "./resources/js/transformers/ProductTransformer.js");
-/* harmony import */ var _state__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./state */ "./resources/js/pages/auth/store/state.js");
+/* harmony import */ var _state__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./state */ "./resources/js/pages/auth/store/state.js");
+/* harmony import */ var _transformers_UserTransformer__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../transformers/UserTransformer */ "./resources/js/transformers/UserTransformer.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -4570,22 +4576,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   loadCurrentUser: function loadCurrentUser(_ref, form) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-      var commit, newObj, camel;
+      var commit;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
               commit = _ref.commit;
               commit('setCurrentUser', form);
-              newObj = {};
+              _state__WEBPACK_IMPORTED_MODULE_3__["default"].currentUser = _transformers_UserTransformer__WEBPACK_IMPORTED_MODULE_4__.userTransformer.transformFromApi(_state__WEBPACK_IMPORTED_MODULE_3__["default"].currentUser);
+              console.log('verify', _state__WEBPACK_IMPORTED_MODULE_3__["default"].currentUser);
 
-              for (camel in _state__WEBPACK_IMPORTED_MODULE_4__["default"].currentUser) {
-                newObj[_transformers_ProductTransformer__WEBPACK_IMPORTED_MODULE_3__["default"].transformToApi(camel)] = _state__WEBPACK_IMPORTED_MODULE_4__["default"].currentUser[camel];
-              }
-
-              console.log('bla bla', newObj);
-
-            case 5:
+            case 4:
             case "end":
               return _context.stop();
           }
@@ -5738,18 +5739,20 @@ var apiTransformer = /*#__PURE__*/function () {
 
 /***/ }),
 
-/***/ "./resources/js/transformers/ProductTransformer.js":
-/*!*********************************************************!*\
-  !*** ./resources/js/transformers/ProductTransformer.js ***!
-  \*********************************************************/
+/***/ "./resources/js/transformers/UserTransformer.js":
+/*!******************************************************!*\
+  !*** ./resources/js/transformers/UserTransformer.js ***!
+  \******************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ productTransformer)
+/* harmony export */   "userTransformer": () => (/* binding */ userTransformer)
 /* harmony export */ });
 /* harmony import */ var _ApiTransformer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ApiTransformer */ "./resources/js/transformers/ApiTransformer.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -5774,40 +5777,39 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
-var productTransformer = /*#__PURE__*/function (_apiTransformer) {
-  _inherits(productTransformer, _apiTransformer);
+var userTransformer = /*#__PURE__*/function (_apiTransformer) {
+  _inherits(userTransformer, _apiTransformer);
 
-  var _super = _createSuper(productTransformer);
+  var _super = _createSuper(userTransformer);
 
-  function productTransformer() {
-    _classCallCheck(this, productTransformer);
+  function userTransformer() {
+    _classCallCheck(this, userTransformer);
 
     return _super.apply(this, arguments);
   }
 
-  _createClass(productTransformer, null, [{
+  _createClass(userTransformer, null, [{
     key: "transformFromApi",
     value: function transformFromApi(item) {
       return {
-        "id": _.get(item, 'id', null)
+        "username": lodash__WEBPACK_IMPORTED_MODULE_1___default().get(item, 'username', null),
+        "password": lodash__WEBPACK_IMPORTED_MODULE_1___default().get(item, 'password', null),
+        "first_name": lodash__WEBPACK_IMPORTED_MODULE_1___default().get(item, 'firstName', null),
+        "last_name": lodash__WEBPACK_IMPORTED_MODULE_1___default().get(item, 'lastName', null),
+        "email": lodash__WEBPACK_IMPORTED_MODULE_1___default().get(item, 'email', null)
       };
-    } // static transformToApi(item) {
-    //     return {
-    //         "id":_.get(item, 'id', null)
-    //     }
-    // }
-
+    }
   }, {
     key: "transformToApi",
     value: function transformToApi(item) {
-      return item.replace(/([A-Z])/g, "_$1").toLowerCase();
+      return {
+        "id": lodash__WEBPACK_IMPORTED_MODULE_1___default().get(item, 'id', null)
+      };
     }
   }]);
 
-  return productTransformer;
+  return userTransformer;
 }(_ApiTransformer__WEBPACK_IMPORTED_MODULE_0__["default"]);
-
-
 
 /***/ }),
 
@@ -33035,7 +33037,7 @@ var render = function() {
                 _vm._v(" "),
                 _c("span", { staticClass: "md-helper-text" }, [
                   _vm._v(
-                    "Must contain: at least 12 characters,\n                    uppercase and lowercase letters, numbers, and special\n                    characters"
+                    "Must contain: at least 12 characters,\n                        uppercase and lowercase letters, numbers, and special\n                        characters"
                   )
                 ])
               ],
@@ -33068,6 +33070,10 @@ var render = function() {
                     ])
                   : !_vm.$v.form.confirmPassword.sameAsPassword
                   ? _c("span", { staticClass: "md-error" }, [
+                      _vm._v("The passwords do not match")
+                    ])
+                  : !_vm.$v.form.confirmPassword.valid
+                  ? _c("span", { staticClass: "md-error" }, [
                       _vm._v("Invalid password")
                     ])
                   : _vm._e(),
@@ -33089,33 +33095,6 @@ var render = function() {
             attrs: { id: "submit-btn", type: "submit", disabled: _vm.sending }
           },
           [_vm._v("Register")]
-        ),
-        _vm._v(" "),
-        _c(
-          "md-snackbar",
-          {
-            attrs: {
-              "md-active": _vm.userSaved,
-              "md-position": "center",
-              duration: 4000,
-              "md-persistent": ""
-            },
-            on: {
-              "update:mdActive": function($event) {
-                _vm.userSaved = $event
-              },
-              "update:md-active": function($event) {
-                _vm.userSaved = $event
-              }
-            }
-          },
-          [
-            _vm._v(
-              "\n            The user " +
-                _vm._s(_vm.currentUser) +
-                " was saved with success!\n        "
-            )
-          ]
         )
       ],
       1

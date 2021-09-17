@@ -71,7 +71,8 @@
                         v-model="form.confirmPassword"
                         :disabled="sending"></md-input>
                     <span class="md-error" v-if="!$v.form.confirmPassword.required">The confirmation password is required</span>
-                    <span class="md-error" v-else-if="!$v.form.confirmPassword.sameAsPassword">Invalid password</span>
+                    <span class="md-error" v-else-if="!$v.form.confirmPassword.sameAsPassword">The passwords do not match</span>
+                    <span class="md-error" v-else-if="!$v.form.confirmPassword.valid">Invalid password</span>
                     <span class="md-helper-text">Must be the same as the password above</span>
                 </md-field>
             </div>
@@ -83,20 +84,20 @@
                 :disabled="sending"
             >Register</md-button>
 
-            <md-snackbar
-                :md-active.sync="userSaved"
-                :md-position="'center'"
-                :duration="4000"
-                md-persistent>
-                The user {{ currentUser }} was saved with success!
-            </md-snackbar>
+<!--            <md-snackbar-->
+<!--                :md-active.sync="userSaved"-->
+<!--                :md-position="'center'"-->
+<!--                :duration="4000"-->
+<!--                md-persistent>-->
+<!--                The user {{ currentUser }} was saved with success!-->
+<!--            </md-snackbar>-->
         </form>
     </div>
 </template>
 
 <script>
 import {validationMixin} from 'vuelidate'
-import {email, minLength, required, sameAs} from 'vuelidate/lib/validators'
+import {email, minLength, maxLength, required, sameAs} from 'vuelidate/lib/validators'
 
 export default {
     name: "Register",
@@ -105,15 +106,18 @@ export default {
         form: {
             firstName: {
                 required,
-                minLength: minLength(3)
+                minLength: minLength(3),
+                maxLength: maxLength(35)
             },
             lastName: {
                 required,
-                minLength: minLength(3)
+                minLength: minLength(3),
+                maxLength: maxLength(35)
             },
             username: {
                 required,
-                minLength: minLength(8)
+                minLength: minLength(6),
+                maxLength: maxLength(20)
             },
             email: {
                 required,
@@ -128,7 +132,11 @@ export default {
             },
             confirmPassword: {
                 required,
-                sameAsPassword: sameAs('password')
+                sameAsPassword: sameAs('password'),
+                valid: function(value) {
+                    return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/
+                        .test(value)
+                }
             }
         }
     },
@@ -176,15 +184,11 @@ export default {
         },
         validateUser () {
             this.$v.$touch()
-            if(this.$v.$invalid){
-                // console.log('invalid', this.userSaved)
-            }
-            else if (!this.$v.$invalid) {
+
+            if (!this.$v.$invalid) {
                 this.saveUser()
                 this.$store.dispatch('auth/loadCurrentUser', this.form)
                 this.$store.dispatch('auth/postUser')
-
-                // console.log('valid', this.userSaved)
             }
         }
     }
