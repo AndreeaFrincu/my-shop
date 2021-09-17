@@ -6,6 +6,15 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends BaseModel
 {
+
+    public $fillable = [
+        'username',
+        'password',
+        'first_name',
+        'last_name',
+        'email'
+    ];
+
     protected $cascadeDeletes = ['orders', 'carts'];
 
     public function orders(): HasMany
