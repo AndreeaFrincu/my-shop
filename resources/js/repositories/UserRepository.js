@@ -17,4 +17,14 @@ export default class UserRepository extends BaseRepository {
                 console.log(error)
             })
     }
+
+    login() {
+        axios.get('/sanctum/csrf-cookie').then(response => {
+            // console.log(response)
+            axios.post('/api/users/login', )
+            .then(response2 => {
+                console.log(response2);
+            })
+        });
+    }
 }

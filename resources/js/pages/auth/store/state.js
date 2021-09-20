@@ -5,5 +5,10 @@ export default {
         'firstName': null,
         'lastName': null,
         'email': null
+    },
+
+    loginFormUser: {
+        'username': null,
+        'password': null
     }
 }

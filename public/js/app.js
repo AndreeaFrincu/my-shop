@@ -2838,6 +2838,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -2858,8 +2860,35 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+(axios__WEBPACK_IMPORTED_MODULE_0___default().defaults.withCredentials) = true;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: "Login"
+  name: "Login",
+  data: function data() {
+    return {
+      login_form: {
+        username: null,
+        password: null
+      }
+    };
+  },
+  methods: {
+    loginUser: function loginUser() {
+      this.$store.dispatch('auth/loginFormUser', this.login_form);
+      this.$store.dispatch('auth/loginUser');
+    }
+  }
 });
 
 /***/ }),
@@ -4583,10 +4612,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             case 0:
               commit = _ref.commit;
               commit('setCurrentUser', form);
-              _state__WEBPACK_IMPORTED_MODULE_3__["default"].currentUser = _transformers_UserTransformer__WEBPACK_IMPORTED_MODULE_4__.userTransformer.transformFromApi(_state__WEBPACK_IMPORTED_MODULE_3__["default"].currentUser);
-              console.log('verify', _state__WEBPACK_IMPORTED_MODULE_3__["default"].currentUser);
+              _state__WEBPACK_IMPORTED_MODULE_3__["default"].currentUser = _transformers_UserTransformer__WEBPACK_IMPORTED_MODULE_4__.userTransformer.transformFromApiRegisterUser(_state__WEBPACK_IMPORTED_MODULE_3__["default"].currentUser); // console.log('verify register', state.currentUser)
 
-            case 4:
+            case 3:
             case "end":
               return _context.stop();
           }
@@ -4594,21 +4622,57 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, _callee);
     }))();
   },
-  postUser: function postUser() {
+  loginFormUser: function loginFormUser(_ref2, form) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+      var commit;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              _context2.next = 2;
-              return new _repositories_UserRepository__WEBPACK_IMPORTED_MODULE_1__["default"](new _models_User__WEBPACK_IMPORTED_MODULE_2__["default"]()).create();
+              commit = _ref2.commit;
+              commit('setLoginFormUser', form);
+              console.log('verify login', _state__WEBPACK_IMPORTED_MODULE_3__["default"].loginFormUser);
 
-            case 2:
+            case 3:
             case "end":
               return _context2.stop();
           }
         }
       }, _callee2);
+    }))();
+  },
+  postUser: function postUser() {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.next = 2;
+              return new _repositories_UserRepository__WEBPACK_IMPORTED_MODULE_1__["default"](new _models_User__WEBPACK_IMPORTED_MODULE_2__["default"]()).create();
+
+            case 2:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3);
+    }))();
+  },
+  loginUser: function loginUser() {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              _context4.next = 2;
+              return new _repositories_UserRepository__WEBPACK_IMPORTED_MODULE_1__["default"](new _models_User__WEBPACK_IMPORTED_MODULE_2__["default"]()).login();
+
+            case 2:
+            case "end":
+              return _context4.stop();
+          }
+        }
+      }, _callee4);
     }))();
   }
 });
@@ -4667,12 +4731,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  setCurrentUser: function setCurrentUser(state, form) {
-    state.currentUser.username = form.username;
-    state.currentUser.password = form.password;
-    state.currentUser.firstName = form.firstName;
-    state.currentUser.lastName = form.lastName;
-    state.currentUser.email = form.email;
+  setCurrentUser: function setCurrentUser(state, registerForm) {
+    state.currentUser.username = registerForm.username;
+    state.currentUser.password = registerForm.password;
+    state.currentUser.firstName = registerForm.firstName;
+    state.currentUser.lastName = registerForm.lastName;
+    state.currentUser.email = registerForm.email;
+  },
+  setLoginFormUser: function setLoginFormUser(state, loginForm) {
+    state.loginFormUser.username = loginForm.username;
+    state.loginFormUser.password = loginForm.password;
   }
 });
 
@@ -4696,6 +4764,10 @@ __webpack_require__.r(__webpack_exports__);
     'firstName': null,
     'lastName': null,
     'email': null
+  },
+  loginFormUser: {
+    'username': null,
+    'password': null
   }
 });
 
@@ -5563,6 +5635,16 @@ var UserRepository = /*#__PURE__*/function (_BaseRepository) {
         console.log(error);
       });
     }
+  }, {
+    key: "login",
+    value: function login() {
+      axios__WEBPACK_IMPORTED_MODULE_3___default().get('/sanctum/csrf-cookie').then(function (response) {
+        // console.log(response)
+        axios__WEBPACK_IMPORTED_MODULE_3___default().post('/api/users/login').then(function (response2) {
+          console.log(response2);
+        });
+      });
+    }
   }]);
 
   return UserRepository;
@@ -5789,8 +5871,8 @@ var userTransformer = /*#__PURE__*/function (_apiTransformer) {
   }
 
   _createClass(userTransformer, null, [{
-    key: "transformFromApi",
-    value: function transformFromApi(item) {
+    key: "transformFromApiRegisterUser",
+    value: function transformFromApiRegisterUser(item) {
       return {
         "username": lodash__WEBPACK_IMPORTED_MODULE_1___default().get(item, 'username', null),
         "password": lodash__WEBPACK_IMPORTED_MODULE_1___default().get(item, 'password', null),
@@ -32795,43 +32877,76 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "login-content" },
-    [
-      _c(
-        "div",
-        { staticClass: "fields" },
-        [
-          _c(
-            "md-field",
-            [
-              _c("label", [_vm._v("Username or Email")]),
-              _vm._v(" "),
-              _c("md-input", { attrs: { type: "text" } })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "md-field",
-            [
-              _c("label", [_vm._v("Password")]),
-              _vm._v(" "),
-              _c("md-input", { attrs: { type: "password" } })
-            ],
-            1
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c("md-button", { staticClass: "md-raised md-primary" }, [
-        _vm._v("Login")
-      ])
-    ],
-    1
-  )
+  return _c("div", { staticClass: "login-content" }, [
+    _c(
+      "form",
+      {
+        attrs: { novalidate: "" },
+        on: {
+          submit: function($event) {
+            $event.preventDefault()
+            return _vm.loginUser.apply(null, arguments)
+          }
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "fields" },
+          [
+            _c(
+              "md-field",
+              [
+                _c("label", [_vm._v("Username or Email")]),
+                _vm._v(" "),
+                _c("md-input", {
+                  attrs: { type: "text" },
+                  model: {
+                    value: _vm.login_form.username,
+                    callback: function($$v) {
+                      _vm.$set(_vm.login_form, "username", $$v)
+                    },
+                    expression: "login_form.username"
+                  }
+                })
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "md-field",
+              [
+                _c("label", [_vm._v("Password")]),
+                _vm._v(" "),
+                _c("md-input", {
+                  attrs: { type: "password" },
+                  model: {
+                    value: _vm.login_form.password,
+                    callback: function($$v) {
+                      _vm.$set(_vm.login_form, "password", $$v)
+                    },
+                    expression: "login_form.password"
+                  }
+                })
+              ],
+              1
+            )
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "md-button",
+          {
+            staticClass: "md-raised md-primary",
+            attrs: { id: "submit-login-btn", type: "submit" }
+          },
+          [_vm._v("\n            Login\n        ")]
+        )
+      ],
+      1
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true

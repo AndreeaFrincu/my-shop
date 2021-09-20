@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import AuthenticationMethod from "./components/AuthenticationMethod";
+import AuthenticationMethod from "./components/AuthenticationMethod"
 export default {
     name: "Auth",
     components: {AuthenticationMethod}

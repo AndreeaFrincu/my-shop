@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Spatie\QueryBuilder\QueryBuilder;
+use Symfony\Component\Console\Input\Input;
 
 class UserController extends Controller
 {
@@ -13,7 +18,8 @@ class UserController extends Controller
 
     public function getAll()
     {
-
+        return QueryBuilder::for(User::class)
+            ->get();
     }
 
     public function update()
@@ -23,34 +29,45 @@ class UserController extends Controller
 
     public function create(Request $request)
     {
-        return $this->validate($request, [
+        $validated = $this->validate($request, [
             'username' => 'bail|required|min:6|max:20|unique:users,username',
             'password' => 'required|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/',
             'first_name' => 'required|min:3|max:35',
             'last_name' => 'required|min:3|max:35',
             'email' => 'required|email|unique:users,email',
-        ], [
-            'username.required' => 'Username is required',
-            'username.min' => 'Username is too short',
-            'username.max' => 'Username is too long',
+        ],
+        [
             'username.unique' => 'Username is already taken',
-
-            'password.required' => 'Password is required',
-            'password.regex' => 'Password must contain: at least 12 characters,
-                                uppercase and lowercase letters, numbers, and special
-                                characters',
-
-            'first_name.required' => 'First Name is required',
-            'first_name.min' => 'First Name is too short',
-            'first_name.max' => 'First Name is too long',
-
-            'last_name.required' => 'Last Name is required',
-            'last_name.min' => 'Last Name is too short',
-            'last_name.max' => 'Last Name is too long',
-
-            'email.required' => 'Email is required',
             'email.unique' => 'Email is already taken',
+        ]
+        );
+
+        $user = User::create([
+            'username' => $validated['username'],
+            'password' => Hash::make($validated['password']),
+            'first_name' => $validated['first_name'],
+            'last_name' => $validated['last_name'],
+            'email' => $validated['email']
         ]);
+
+        return $user;
+
+//        $token = $request->$user->createToken('auth_token')
+//            ->plainTextToken;
+//
+//        return response()->json([
+//            'access_token' => $token,
+//            'token_type' => 'Bearer'
+//        ]);
+    }
+
+    public function login(Request $request) {
+        $rules = array(
+            'username' => 'required',
+            'password' => 'required'
+        );
+
+
     }
 
     public function delete()
