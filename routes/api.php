@@ -23,19 +23,29 @@ use Illuminate\Support\Facades\Route;
 //    return $request->user();
 //});
 
+/** Products */
 Route::get('/products', [ProductController::class, 'getAll']);
 Route::get('/products/table', [ProductController::class, 'getTable']);
 Route::get('/products/{id}', [ProductController::class, 'getOne'])->where('id', '[0-9]+');
 Route::delete('/products/{id}', [ProductController::class, 'delete'])->where('id', '[0-9]+');
 
+/** Genres */
 Route::get('/genres', [GenreController::class, 'getAll']);
 Route::get('/genres/{id}', [GenreController::class, 'getOne'])->where('id', '[0-9]+');
 Route::delete('/genres/{id}', [GenreController::class, 'delete'])->where('id', '[0-9]+');
 
+/** Authors */
 Route::get('/authors', [AuthorController::class, 'getAll']);
 Route::get('/authors/{id}', [AuthorController::class, 'getOne'])->where('id', '[0-9]+');
 Route::delete('/authors/{id}', [AuthorController::class, 'delete'])->where('id', '[0-9]+');
 
+/** Product Prices */
 Route::get('/product_prices', [ProductPriceController::class, 'getAll']);
 
+/** Users */
 Route::post('/users', [UserController::class, 'create']);
+Route::post('/users/login', [UserController::class, 'login']);
+Route::get('/users', [UserController::class, 'getAll']);
+//Route::middleware('auth:sanctum')->get('/users', function (Request $request) {
+//    return $request->user();
+//});

@@ -2,7 +2,7 @@ import apiTransformer from "./ApiTransformer";
 import _ from 'lodash'
 
 export class userTransformer extends apiTransformer {
-    static transformFromApi(item) {
+    static transformFromApiRegisterUser(item) {
         return {
             "username":_.get(item, 'username', null),
             "password":_.get(item, 'password', null),
