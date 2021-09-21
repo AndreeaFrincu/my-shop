@@ -14,7 +14,7 @@ export default {
     async loginFormUser({commit}, form) {
         commit('setLoginFormUser', form)
 
-        console.log('verify login', state.loginFormUser)
+        // console.log('verify login', state.loginFormUser)
     },
 
     async postUser() {

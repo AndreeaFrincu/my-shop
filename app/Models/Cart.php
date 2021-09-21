@@ -7,10 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Cart extends Model
+class Cart extends BaseModel
 {
-    use HasFactory;
-
     protected $with = ['user'];
 
     protected $cascadeDeletes = ['cartProducts'];

@@ -4,11 +4,11 @@ export default {
         'password': null,
         'firstName': null,
         'lastName': null,
-        'email': null
+        'email': null,
     },
 
     loginFormUser: {
         'username': null,
-        'password': null
+        'password': null,
     }
 }

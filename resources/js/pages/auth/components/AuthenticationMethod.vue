@@ -2,9 +2,9 @@
     <div class="auth-content">
         <md-card class="auth-card">
             <md-tabs md-alignment="centered">
-                <md-tab id="tab-home" md-label="Register"
+                <md-tab id="tab-register" md-label="Register"
                         @click="selected = tabs[0]"></md-tab>
-                <md-tab id="tab-pages" md-label="Login"
+                <md-tab id="tab-login" md-label="Login"
                         @click="selected = tabs[1]"></md-tab>
             </md-tabs>
 

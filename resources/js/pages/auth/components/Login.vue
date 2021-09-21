@@ -5,7 +5,7 @@
             @submit.prevent="loginUser">
             <div class="fields">
                 <md-field>
-                    <label>Username or Email</label>
+                    <label>Username </label>
                     <md-input
                         v-model="login_form.username"
                         type="text"></md-input>
@@ -25,12 +25,19 @@
                 class="md-raised md-primary">
                 Login
             </md-button>
+            <router-link id="link-home" to="/products">
+                <md-button class="drawer-button">
+                    <p class="drawer-button-text">Products</p>
+                </md-button>
+            </router-link>
         </form>
     </div>
 </template>
 
 <script>
 import axios from "axios";
+import User from "../../../authentication/User";
+import Csrf from "../../../authentication/Csrf";
 axios.defaults.withCredentials = true
 
 export default {
@@ -39,12 +46,25 @@ export default {
         login_form: {
             username: null,
             password: null
+        },
+        header: {
+            'Accept': 'application/json'
         }
     }),
     methods: {
         loginUser() {
             this.$store.dispatch('auth/loginFormUser', this.login_form)
-            this.$store.dispatch('auth/loginUser')
+            Csrf.getCookie()
+            User.login(this.login_form, this.header)
+            .then(() => {
+                localStorage.setItem("auth", "true")
+                this.$router.push({name: 'products'})
+            })
+            .catch(error => {
+                if(error.response.status === 422) {
+                    this.errors = error.response.data.errors
+                }
+            })
         }
     }
 }

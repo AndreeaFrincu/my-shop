@@ -1,7 +1,7 @@
 import BaseRepository from './BaseRepository'
 import User from "../models/User";
 import state from "../pages/auth/store/state";
-import axios from "axios";
+import api from "../authentication/Api";
 
 export default class UserRepository extends BaseRepository {
     constructor() {
@@ -9,22 +9,28 @@ export default class UserRepository extends BaseRepository {
     }
 
     create() {
-        axios.post('/api/users', state.currentUser)
-            .then((response) => {
-                console.log(response)
+        api.get('/csrf-cookie').then(response => {
+            console.log(response)
+            api.post('/register', state.currentUser)
+            .then((response2) => {
+                console.log(response2)
             })
             .catch((error) => {
                 console.log(error)
             })
+        })
     }
 
-    login() {
-        axios.get('/sanctum/csrf-cookie').then(response => {
-            // console.log(response)
-            axios.post('/api/users/login', )
-            .then(response2 => {
-                console.log(response2);
-            })
-        });
-    }
+    // login() {
+    //     api.get('/csrf-cookie').then(response => {
+    //         // console.log(response)
+    //         api.post('/login', state.loginFormUser)
+    //         .then(response2 => {
+    //             console.log(response2);
+    //         })
+    //         .catch((error) => {
+    //             console.log(error)
+    //         })
+    //     });
+    // }
 }

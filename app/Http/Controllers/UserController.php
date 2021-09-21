@@ -3,14 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 use Spatie\QueryBuilder\QueryBuilder;
-use Symfony\Component\Console\Input\Input;
 
 class UserController extends Controller
 {
+
+    use AuthenticatesUsers;
+
     public function getOne()
     {
 
@@ -27,7 +31,7 @@ class UserController extends Controller
 
     }
 
-    public function create(Request $request)
+    public function register(Request $request)
     {
         $validated = $this->validate($request, [
             'username' => 'bail|required|min:6|max:20|unique:users,username',
@@ -42,7 +46,7 @@ class UserController extends Controller
         ]
         );
 
-        $user = User::create([
+        User::create([
             'username' => $validated['username'],
             'password' => Hash::make($validated['password']),
             'first_name' => $validated['first_name'],
@@ -50,24 +54,23 @@ class UserController extends Controller
             'email' => $validated['email']
         ]);
 
-        return $user;
-
-//        $token = $request->$user->createToken('auth_token')
-//            ->plainTextToken;
-//
-//        return response()->json([
-//            'access_token' => $token,
-//            'token_type' => 'Bearer'
-//        ]);
+        return response()->json(['msg' => 'Registered Successfully']);
     }
 
     public function login(Request $request) {
-        $rules = array(
-            'username' => 'required',
-            'password' => 'required'
-        );
+        $request->validate([
+            'username' => ['required'],
+            'password' => ['required'],
+        ]);
 
+        if (Auth::attempt($request->only('username', 'password'))) {
+            return response()->json(Auth::user(), 200);
+        }
 
+        throw ValidationException::withMessages([
+            'username' => ['The username is incorrect.'],
+            'password' => ['The password is incorrect.'],
+        ]);
     }
 
     public function delete()
