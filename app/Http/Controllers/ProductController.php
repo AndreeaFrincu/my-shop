@@ -3,12 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class ProductController extends Controller
 {
+
+    use AuthenticatesUsers;
+
     public function getOne(Request $request)
     {
         return Product::where('id', $request->id)->firstOrFail();
@@ -16,16 +21,18 @@ class ProductController extends Controller
 
     public function getAll(Request $request)
     {
-        return QueryBuilder::for(Product::class)
-            ->join('product_prices', 'products.id',
-                '=', 'product_prices.product_id')
-            ->allowedFilters([
-                AllowedFilter::exact('genre_id'),
-                AllowedFilter::scope('search'),
-                AllowedFilter::trashed()
-            ])
-            ->allowedSorts('title', 'price')
-            ->get();
+        if(Auth::check()) {
+            return QueryBuilder::for(Product::class)
+                ->join('product_prices', 'products.id',
+                    '=', 'product_prices.product_id')
+                ->allowedFilters([
+                    AllowedFilter::exact('genre_id'),
+                    AllowedFilter::scope('search'),
+                    AllowedFilter::trashed()
+                ])
+                ->allowedSorts('title', 'price')
+                ->get();
+        }
     }
 
     public function getTable(Request $request)

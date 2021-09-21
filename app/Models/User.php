@@ -2,14 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Auth\Authenticatable;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends BaseModel
+class User extends Authenticatable
 {
-    use HasApiTokens, Notifiable, Authenticatable;
+    use HasApiTokens, Notifiable,
+        HasFactory, SoftDeletes, CascadeSoftDeletes;
 
     public $fillable = [
         'username',

@@ -2840,6 +2840,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _authentication_User__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../authentication/User */ "./resources/js/authentication/User.js");
+/* harmony import */ var _authentication_Csrf__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../authentication/Csrf */ "./resources/js/authentication/Csrf.js");
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2872,6 +2879,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
+
 (axios__WEBPACK_IMPORTED_MODULE_0___default().defaults.withCredentials) = true;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Login",
@@ -2880,13 +2889,29 @@ __webpack_require__.r(__webpack_exports__);
       login_form: {
         username: null,
         password: null
+      },
+      header: {
+        'Accept': 'application/json'
       }
     };
   },
   methods: {
     loginUser: function loginUser() {
+      var _this = this;
+
       this.$store.dispatch('auth/loginFormUser', this.login_form);
-      this.$store.dispatch('auth/loginUser');
+      _authentication_Csrf__WEBPACK_IMPORTED_MODULE_2__["default"].getCookie();
+      _authentication_User__WEBPACK_IMPORTED_MODULE_1__["default"].login(this.login_form, this.header).then(function () {
+        localStorage.setItem("auth", "true");
+
+        _this.$router.push({
+          name: 'products'
+        });
+      })["catch"](function (error) {
+        if (error.response.status === 422) {
+          _this.errors = error.response.data.errors;
+        }
+      });
     }
   }
 });
@@ -4323,6 +4348,152 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_8__["default"]({
 
 /***/ }),
 
+/***/ "./resources/js/authentication/Api.js":
+/*!********************************************!*\
+  !*** ./resources/js/authentication/Api.js ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+
+var api = axios__WEBPACK_IMPORTED_MODULE_0___default().create({
+  baseURL: 'http://my-shop.valet/api'
+});
+api.defaults.withCredentials = true;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (api);
+
+/***/ }),
+
+/***/ "./resources/js/authentication/Csrf.js":
+/*!*********************************************!*\
+  !*** ./resources/js/authentication/Csrf.js ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _Api__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Api */ "./resources/js/authentication/Api.js");
+/* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! js-cookie */ "./node_modules/js-cookie/dist/js.cookie.mjs");
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  getCookie: function getCookie() {
+    var token = js_cookie__WEBPACK_IMPORTED_MODULE_1__["default"].get("XSRF-TOKEN");
+
+    if (token) {
+      return new Promise(function (resolve) {
+        resolve(token);
+      });
+    }
+
+    return _Api__WEBPACK_IMPORTED_MODULE_0__["default"].get("/csrf-cookie");
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/authentication/User.js":
+/*!*********************************************!*\
+  !*** ./resources/js/authentication/User.js ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Api */ "./resources/js/authentication/Api.js");
+/* harmony import */ var _Csrf__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Csrf */ "./resources/js/authentication/Csrf.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  register: function register(form) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return _Csrf__WEBPACK_IMPORTED_MODULE_2__["default"].getCookie();
+
+            case 2:
+              return _context.abrupt("return", _Api__WEBPACK_IMPORTED_MODULE_1__["default"].post("/register", form));
+
+            case 3:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }))();
+  },
+  login: function login(form, headers) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.next = 2;
+              return _Csrf__WEBPACK_IMPORTED_MODULE_2__["default"].getCookie();
+
+            case 2:
+              return _context2.abrupt("return", _Api__WEBPACK_IMPORTED_MODULE_1__["default"].post("/login", form, {
+                headers: headers
+              }));
+
+            case 3:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2);
+    }))();
+  },
+  logout: function logout() {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.next = 2;
+              return _Csrf__WEBPACK_IMPORTED_MODULE_2__["default"].getCookie();
+
+            case 2:
+              return _context3.abrupt("return", _Api__WEBPACK_IMPORTED_MODULE_1__["default"].post("/logout"));
+
+            case 3:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3);
+    }))();
+  },
+  auth: function auth() {
+    return _Api__WEBPACK_IMPORTED_MODULE_1__["default"].get("/users");
+  }
+});
+
+/***/ }),
+
 /***/ "./resources/js/models/BaseModel.js":
 /*!******************************************!*\
   !*** ./resources/js/models/BaseModel.js ***!
@@ -4630,10 +4801,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           switch (_context2.prev = _context2.next) {
             case 0:
               commit = _ref2.commit;
-              commit('setLoginFormUser', form);
-              console.log('verify login', _state__WEBPACK_IMPORTED_MODULE_3__["default"].loginFormUser);
+              commit('setLoginFormUser', form); // console.log('verify login', state.loginFormUser)
 
-            case 3:
+            case 2:
             case "end":
               return _context2.stop();
           }
@@ -5586,8 +5756,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _BaseRepository__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./BaseRepository */ "./resources/js/repositories/BaseRepository.js");
 /* harmony import */ var _models_User__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../models/User */ "./resources/js/models/User.js");
 /* harmony import */ var _pages_auth_store_state__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../pages/auth/store/state */ "./resources/js/pages/auth/store/state.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _authentication_Api__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../authentication/Api */ "./resources/js/authentication/Api.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -5629,22 +5798,27 @@ var UserRepository = /*#__PURE__*/function (_BaseRepository) {
   _createClass(UserRepository, [{
     key: "create",
     value: function create() {
-      axios__WEBPACK_IMPORTED_MODULE_3___default().post('/api/users', _pages_auth_store_state__WEBPACK_IMPORTED_MODULE_2__["default"].currentUser).then(function (response) {
+      _authentication_Api__WEBPACK_IMPORTED_MODULE_3__["default"].get('/csrf-cookie').then(function (response) {
         console.log(response);
-      })["catch"](function (error) {
-        console.log(error);
-      });
-    }
-  }, {
-    key: "login",
-    value: function login() {
-      axios__WEBPACK_IMPORTED_MODULE_3___default().get('/sanctum/csrf-cookie').then(function (response) {
-        // console.log(response)
-        axios__WEBPACK_IMPORTED_MODULE_3___default().post('/api/users/login').then(function (response2) {
+        _authentication_Api__WEBPACK_IMPORTED_MODULE_3__["default"].post('/register', _pages_auth_store_state__WEBPACK_IMPORTED_MODULE_2__["default"].currentUser).then(function (response2) {
           console.log(response2);
+        })["catch"](function (error) {
+          console.log(error);
         });
       });
-    }
+    } // login() {
+    //     api.get('/csrf-cookie').then(response => {
+    //         // console.log(response)
+    //         api.post('/login', state.loginFormUser)
+    //         .then(response2 => {
+    //             console.log(response2);
+    //         })
+    //         .catch((error) => {
+    //             console.log(error)
+    //         })
+    //     });
+    // }
+
   }]);
 
   return UserRepository;
@@ -32644,7 +32818,7 @@ var render = function() {
                     [
                       _c(
                         "router-link",
-                        { attrs: { id: "link-home", to: "/" } },
+                        { attrs: { id: "link-home", to: "/home" } },
                         [
                           _c("md-button", { staticClass: "drawer-button" }, [
                             _c("p", { staticClass: "drawer-button-text" }, [
@@ -32821,7 +32995,7 @@ var render = function() {
             { attrs: { "md-alignment": "centered" } },
             [
               _c("md-tab", {
-                attrs: { id: "tab-home", "md-label": "Register" },
+                attrs: { id: "tab-register", "md-label": "Register" },
                 on: {
                   click: function($event) {
                     _vm.selected = _vm.tabs[0]
@@ -32830,7 +33004,7 @@ var render = function() {
               }),
               _vm._v(" "),
               _c("md-tab", {
-                attrs: { id: "tab-pages", "md-label": "Login" },
+                attrs: { id: "tab-login", "md-label": "Login" },
                 on: {
                   click: function($event) {
                     _vm.selected = _vm.tabs[1]
@@ -32897,7 +33071,7 @@ var render = function() {
             _c(
               "md-field",
               [
-                _c("label", [_vm._v("Username or Email")]),
+                _c("label", [_vm._v("Username ")]),
                 _vm._v(" "),
                 _c("md-input", {
                   attrs: { type: "text" },
@@ -32942,6 +33116,19 @@ var render = function() {
             attrs: { id: "submit-login-btn", type: "submit" }
           },
           [_vm._v("\n            Login\n        ")]
+        ),
+        _vm._v(" "),
+        _c(
+          "router-link",
+          { attrs: { id: "link-home", to: "/products" } },
+          [
+            _c("md-button", { staticClass: "drawer-button" }, [
+              _c("p", { staticClass: "drawer-button-text" }, [
+                _vm._v("Products")
+              ])
+            ])
+          ],
+          1
         )
       ],
       1
@@ -85736,6 +85923,155 @@ var index = {
 /***/ (() => {
 
 /* (ignored) */
+
+/***/ }),
+
+/***/ "./node_modules/js-cookie/dist/js.cookie.mjs":
+/*!***************************************************!*\
+  !*** ./node_modules/js-cookie/dist/js.cookie.mjs ***!
+  \***************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/*! js-cookie v3.0.1 | MIT */
+/* eslint-disable no-var */
+function assign (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+    for (var key in source) {
+      target[key] = source[key];
+    }
+  }
+  return target
+}
+/* eslint-enable no-var */
+
+/* eslint-disable no-var */
+var defaultConverter = {
+  read: function (value) {
+    if (value[0] === '"') {
+      value = value.slice(1, -1);
+    }
+    return value.replace(/(%[\dA-F]{2})+/gi, decodeURIComponent)
+  },
+  write: function (value) {
+    return encodeURIComponent(value).replace(
+      /%(2[346BF]|3[AC-F]|40|5[BDE]|60|7[BCD])/g,
+      decodeURIComponent
+    )
+  }
+};
+/* eslint-enable no-var */
+
+/* eslint-disable no-var */
+
+function init (converter, defaultAttributes) {
+  function set (key, value, attributes) {
+    if (typeof document === 'undefined') {
+      return
+    }
+
+    attributes = assign({}, defaultAttributes, attributes);
+
+    if (typeof attributes.expires === 'number') {
+      attributes.expires = new Date(Date.now() + attributes.expires * 864e5);
+    }
+    if (attributes.expires) {
+      attributes.expires = attributes.expires.toUTCString();
+    }
+
+    key = encodeURIComponent(key)
+      .replace(/%(2[346B]|5E|60|7C)/g, decodeURIComponent)
+      .replace(/[()]/g, escape);
+
+    var stringifiedAttributes = '';
+    for (var attributeName in attributes) {
+      if (!attributes[attributeName]) {
+        continue
+      }
+
+      stringifiedAttributes += '; ' + attributeName;
+
+      if (attributes[attributeName] === true) {
+        continue
+      }
+
+      // Considers RFC 6265 section 5.2:
+      // ...
+      // 3.  If the remaining unparsed-attributes contains a %x3B (";")
+      //     character:
+      // Consume the characters of the unparsed-attributes up to,
+      // not including, the first %x3B (";") character.
+      // ...
+      stringifiedAttributes += '=' + attributes[attributeName].split(';')[0];
+    }
+
+    return (document.cookie =
+      key + '=' + converter.write(value, key) + stringifiedAttributes)
+  }
+
+  function get (key) {
+    if (typeof document === 'undefined' || (arguments.length && !key)) {
+      return
+    }
+
+    // To prevent the for loop in the first place assign an empty array
+    // in case there are no cookies at all.
+    var cookies = document.cookie ? document.cookie.split('; ') : [];
+    var jar = {};
+    for (var i = 0; i < cookies.length; i++) {
+      var parts = cookies[i].split('=');
+      var value = parts.slice(1).join('=');
+
+      try {
+        var foundKey = decodeURIComponent(parts[0]);
+        jar[foundKey] = converter.read(value, foundKey);
+
+        if (key === foundKey) {
+          break
+        }
+      } catch (e) {}
+    }
+
+    return key ? jar[key] : jar
+  }
+
+  return Object.create(
+    {
+      set: set,
+      get: get,
+      remove: function (key, attributes) {
+        set(
+          key,
+          '',
+          assign({}, attributes, {
+            expires: -1
+          })
+        );
+      },
+      withAttributes: function (attributes) {
+        return init(this.converter, assign({}, this.attributes, attributes))
+      },
+      withConverter: function (converter) {
+        return init(assign({}, this.converter, converter), this.attributes)
+      }
+    },
+    {
+      attributes: { value: Object.freeze(defaultAttributes) },
+      converter: { value: Object.freeze(converter) }
+    }
+  )
+}
+
+var api = init(defaultConverter, { path: '/' });
+/* eslint-enable no-var */
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (api);
+
 
 /***/ }),
 

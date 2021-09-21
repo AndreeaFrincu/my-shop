@@ -29,7 +29,7 @@
                 <md-list-item>
                     <md-icon class="fa fa-home"></md-icon>
                     <span class="md-list-item-text">
-            <router-link id="link-home" to="/">
+            <router-link id="link-home" to="/home">
               <md-button class="drawer-button">
                 <p class="drawer-button-text">Home</p>
               </md-button>
