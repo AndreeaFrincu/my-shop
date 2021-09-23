@@ -2693,6 +2693,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "NavBar",
@@ -2704,6 +2717,22 @@ __webpack_require__.r(__webpack_exports__);
       showNavigation: false,
       showSidepanel: false
     };
+  },
+  methods: {
+    logoutUser: function logoutUser() {
+      this.$store.dispatch('auth/logoutUser');
+      this.$store.dispatch('auth/loginFormUser', {
+        'username': null,
+        'password': null
+      });
+      this.$store.dispatch('auth/refreshUserOnLogout', {
+        'username': null,
+        'password': null,
+        'firstName': null,
+        'lastName': null,
+        'email': null
+      });
+    }
   }
 });
 
@@ -2838,50 +2867,48 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _authentication_User__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../authentication/User */ "./resources/js/authentication/User.js");
-/* harmony import */ var _authentication_Csrf__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../authentication/Csrf */ "./resources/js/authentication/Csrf.js");
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 
 
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
-(axios__WEBPACK_IMPORTED_MODULE_0___default().defaults.withCredentials) = true;
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Login",
   data: function data() {
@@ -2889,9 +2916,6 @@ __webpack_require__.r(__webpack_exports__);
       login_form: {
         username: null,
         password: null
-      },
-      header: {
-        'Accept': 'application/json'
       }
     };
   },
@@ -2899,19 +2923,34 @@ __webpack_require__.r(__webpack_exports__);
     loginUser: function loginUser() {
       var _this = this;
 
-      this.$store.dispatch('auth/loginFormUser', this.login_form);
-      _authentication_Csrf__WEBPACK_IMPORTED_MODULE_2__["default"].getCookie();
-      _authentication_User__WEBPACK_IMPORTED_MODULE_1__["default"].login(this.login_form, this.header).then(function () {
-        localStorage.setItem("auth", "true");
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return _this.$store.dispatch('auth/loginFormUser', _this.login_form);
 
-        _this.$router.push({
-          name: 'products'
-        });
-      })["catch"](function (error) {
-        if (error.response.status === 422) {
-          _this.errors = error.response.data.errors;
-        }
-      });
+              case 2:
+                _context.next = 4;
+                return _this.$store.dispatch('auth/loginUser');
+
+              case 4:
+                if (!(_this.$store.state.auth.authenticatedUser.username !== null)) {
+                  _context.next = 7;
+                  break;
+                }
+
+                _context.next = 7;
+                return _this.$router.push('/products');
+
+              case 7:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
     }
   }
 });
@@ -3081,7 +3120,7 @@ __webpack_require__.r(__webpack_exports__);
       },
       userSaved: false,
       sending: false,
-      currentUser: null
+      newUser: null
     };
   },
   methods: {
@@ -3108,7 +3147,7 @@ __webpack_require__.r(__webpack_exports__);
 
       this.sending = true;
       window.setTimeout(function () {
-        _this.currentUser = "".concat(_this.form.username);
+        _this.newUser = "".concat(_this.form.username);
         _this.userSaved = true;
         _this.sending = false;
 
@@ -3120,7 +3159,7 @@ __webpack_require__.r(__webpack_exports__);
 
       if (!this.$v.$invalid) {
         this.saveUser();
-        this.$store.dispatch('auth/loadCurrentUser', this.form);
+        this.$store.dispatch('auth/loadNewUser', this.form);
         this.$store.dispatch('auth/postUser');
       }
     }
@@ -4348,152 +4387,6 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_8__["default"]({
 
 /***/ }),
 
-/***/ "./resources/js/authentication/Api.js":
-/*!********************************************!*\
-  !*** ./resources/js/authentication/Api.js ***!
-  \********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-
-var api = axios__WEBPACK_IMPORTED_MODULE_0___default().create({
-  baseURL: 'http://my-shop.valet/api'
-});
-api.defaults.withCredentials = true;
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (api);
-
-/***/ }),
-
-/***/ "./resources/js/authentication/Csrf.js":
-/*!*********************************************!*\
-  !*** ./resources/js/authentication/Csrf.js ***!
-  \*********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _Api__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Api */ "./resources/js/authentication/Api.js");
-/* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! js-cookie */ "./node_modules/js-cookie/dist/js.cookie.mjs");
-
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  getCookie: function getCookie() {
-    var token = js_cookie__WEBPACK_IMPORTED_MODULE_1__["default"].get("XSRF-TOKEN");
-
-    if (token) {
-      return new Promise(function (resolve) {
-        resolve(token);
-      });
-    }
-
-    return _Api__WEBPACK_IMPORTED_MODULE_0__["default"].get("/csrf-cookie");
-  }
-});
-
-/***/ }),
-
-/***/ "./resources/js/authentication/User.js":
-/*!*********************************************!*\
-  !*** ./resources/js/authentication/User.js ***!
-  \*********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Api */ "./resources/js/authentication/Api.js");
-/* harmony import */ var _Csrf__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Csrf */ "./resources/js/authentication/Csrf.js");
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  register: function register(form) {
-    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              _context.next = 2;
-              return _Csrf__WEBPACK_IMPORTED_MODULE_2__["default"].getCookie();
-
-            case 2:
-              return _context.abrupt("return", _Api__WEBPACK_IMPORTED_MODULE_1__["default"].post("/register", form));
-
-            case 3:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee);
-    }))();
-  },
-  login: function login(form, headers) {
-    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              _context2.next = 2;
-              return _Csrf__WEBPACK_IMPORTED_MODULE_2__["default"].getCookie();
-
-            case 2:
-              return _context2.abrupt("return", _Api__WEBPACK_IMPORTED_MODULE_1__["default"].post("/login", form, {
-                headers: headers
-              }));
-
-            case 3:
-            case "end":
-              return _context2.stop();
-          }
-        }
-      }, _callee2);
-    }))();
-  },
-  logout: function logout() {
-    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
-        while (1) {
-          switch (_context3.prev = _context3.next) {
-            case 0:
-              _context3.next = 2;
-              return _Csrf__WEBPACK_IMPORTED_MODULE_2__["default"].getCookie();
-
-            case 2:
-              return _context3.abrupt("return", _Api__WEBPACK_IMPORTED_MODULE_1__["default"].post("/logout"));
-
-            case 3:
-            case "end":
-              return _context3.stop();
-          }
-        }
-      }, _callee3);
-    }))();
-  },
-  auth: function auth() {
-    return _Api__WEBPACK_IMPORTED_MODULE_1__["default"].get("/users");
-  }
-});
-
-/***/ }),
-
 /***/ "./resources/js/models/BaseModel.js":
 /*!******************************************!*\
   !*** ./resources/js/models/BaseModel.js ***!
@@ -4774,7 +4667,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  loadCurrentUser: function loadCurrentUser(_ref, form) {
+  loadNewUser: function loadNewUser(_ref, form) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
       var commit;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
@@ -4782,8 +4675,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           switch (_context.prev = _context.next) {
             case 0:
               commit = _ref.commit;
-              commit('setCurrentUser', form);
-              _state__WEBPACK_IMPORTED_MODULE_3__["default"].currentUser = _transformers_UserTransformer__WEBPACK_IMPORTED_MODULE_4__.userTransformer.transformFromApiRegisterUser(_state__WEBPACK_IMPORTED_MODULE_3__["default"].currentUser); // console.log('verify register', state.currentUser)
+              commit('setNewUser', form);
+              _state__WEBPACK_IMPORTED_MODULE_3__["default"].newUser = _transformers_UserTransformer__WEBPACK_IMPORTED_MODULE_4__.userTransformer.transformToApiRegisterUser(_state__WEBPACK_IMPORTED_MODULE_3__["default"].newUser); // console.log('verify register', state.newUser)
 
             case 3:
             case "end":
@@ -4801,7 +4694,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           switch (_context2.prev = _context2.next) {
             case 0:
               commit = _ref2.commit;
-              commit('setLoginFormUser', form); // console.log('verify login', state.loginFormUser)
+              commit('setLoginFormUser', form);
 
             case 2:
             case "end":
@@ -4828,21 +4721,74 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, _callee3);
     }))();
   },
-  loginUser: function loginUser() {
+  loginUser: function loginUser(_ref3) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+      var commit, apiUser, user;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
         while (1) {
           switch (_context4.prev = _context4.next) {
             case 0:
-              _context4.next = 2;
+              commit = _ref3.commit;
+              _context4.next = 3;
               return new _repositories_UserRepository__WEBPACK_IMPORTED_MODULE_1__["default"](new _models_User__WEBPACK_IMPORTED_MODULE_2__["default"]()).login();
 
-            case 2:
+            case 3:
+              apiUser = _context4.sent;
+              user = _transformers_UserTransformer__WEBPACK_IMPORTED_MODULE_4__.userTransformer.transformFromApiAuthenticatedUser(apiUser[0]);
+              commit('setAuthenticatedUser', user);
+              console.log('auth user', _state__WEBPACK_IMPORTED_MODULE_3__["default"].authenticatedUser);
+
+            case 7:
             case "end":
               return _context4.stop();
           }
         }
       }, _callee4);
+    }))();
+  },
+  logoutUser: function logoutUser() {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
+        while (1) {
+          switch (_context5.prev = _context5.next) {
+            case 0:
+              _context5.next = 2;
+              return new _repositories_UserRepository__WEBPACK_IMPORTED_MODULE_1__["default"](new _models_User__WEBPACK_IMPORTED_MODULE_2__["default"]()).logout();
+
+            case 2:
+            case "end":
+              return _context5.stop();
+          }
+        }
+      }, _callee5);
+    }))();
+  },
+  // async loadCurrentUser({commit}) {
+  //     let apiUser = await new UserRepository(new User())
+  //         .fetchAuthenticatedUser()
+  //
+  //     let user = userTransformer.transformFromApiAuthenticatedUser(apiUser[0])
+  //
+  //     commit('setAuthenticatedUser', user)
+  //     console.log('auth user', state.authenticatedUser)
+  //
+  // },
+  refreshUserOnLogout: function refreshUserOnLogout(_ref4, form) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6() {
+      var commit;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
+        while (1) {
+          switch (_context6.prev = _context6.next) {
+            case 0:
+              commit = _ref4.commit;
+              commit('setAuthenticatedUser', form);
+
+            case 2:
+            case "end":
+              return _context6.stop();
+          }
+        }
+      }, _callee6);
     }))();
   }
 });
@@ -4901,16 +4847,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  setCurrentUser: function setCurrentUser(state, registerForm) {
-    state.currentUser.username = registerForm.username;
-    state.currentUser.password = registerForm.password;
-    state.currentUser.firstName = registerForm.firstName;
-    state.currentUser.lastName = registerForm.lastName;
-    state.currentUser.email = registerForm.email;
+  setNewUser: function setNewUser(state, registerForm) {
+    state.newUser.username = registerForm.username;
+    state.newUser.password = registerForm.password;
+    state.newUser.firstName = registerForm.firstName;
+    state.newUser.lastName = registerForm.lastName;
+    state.newUser.email = registerForm.email;
   },
   setLoginFormUser: function setLoginFormUser(state, loginForm) {
     state.loginFormUser.username = loginForm.username;
     state.loginFormUser.password = loginForm.password;
+  },
+  setAuthenticatedUser: function setAuthenticatedUser(state, authUser) {
+    state.authenticatedUser.username = authUser.username;
+    state.authenticatedUser.password = authUser.password;
+    state.authenticatedUser.firstName = authUser.firstName;
+    state.authenticatedUser.lastName = authUser.lastName;
+    state.authenticatedUser.email = authUser.email;
   }
 });
 
@@ -4928,7 +4881,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  currentUser: {
+  newUser: {
     'username': null,
     'password': null,
     'firstName': null,
@@ -4938,6 +4891,13 @@ __webpack_require__.r(__webpack_exports__);
   loginFormUser: {
     'username': null,
     'password': null
+  },
+  authenticatedUser: {
+    'username': null,
+    'password': null,
+    'firstName': null,
+    'lastName': null,
+    'email': null
   }
 });
 
@@ -5753,11 +5713,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ UserRepository)
 /* harmony export */ });
-/* harmony import */ var _BaseRepository__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./BaseRepository */ "./resources/js/repositories/BaseRepository.js");
-/* harmony import */ var _models_User__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../models/User */ "./resources/js/models/User.js");
-/* harmony import */ var _pages_auth_store_state__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../pages/auth/store/state */ "./resources/js/pages/auth/store/state.js");
-/* harmony import */ var _authentication_Api__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../authentication/Api */ "./resources/js/authentication/Api.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _BaseRepository__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./BaseRepository */ "./resources/js/repositories/BaseRepository.js");
+/* harmony import */ var _models_User__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../models/User */ "./resources/js/models/User.js");
+/* harmony import */ var _pages_auth_store_state__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../pages/auth/store/state */ "./resources/js/pages/auth/store/state.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_4__);
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -5783,6 +5752,10 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
+var api = axios__WEBPACK_IMPORTED_MODULE_4___default().create({
+  baseURL: 'http://my-shop.valet/api'
+});
+api.defaults.withCredentials = true;
 
 var UserRepository = /*#__PURE__*/function (_BaseRepository) {
   _inherits(UserRepository, _BaseRepository);
@@ -5792,37 +5765,128 @@ var UserRepository = /*#__PURE__*/function (_BaseRepository) {
   function UserRepository() {
     _classCallCheck(this, UserRepository);
 
-    return _super.call(this, _models_User__WEBPACK_IMPORTED_MODULE_1__["default"]);
+    return _super.call(this, _models_User__WEBPACK_IMPORTED_MODULE_2__["default"]);
   }
 
   _createClass(UserRepository, [{
     key: "create",
     value: function create() {
-      _authentication_Api__WEBPACK_IMPORTED_MODULE_3__["default"].get('/csrf-cookie').then(function (response) {
-        console.log(response);
-        _authentication_Api__WEBPACK_IMPORTED_MODULE_3__["default"].post('/register', _pages_auth_store_state__WEBPACK_IMPORTED_MODULE_2__["default"].currentUser).then(function (response2) {
-          console.log(response2);
-        })["catch"](function (error) {
-          console.log(error);
-        });
+      api.post('/register', _pages_auth_store_state__WEBPACK_IMPORTED_MODULE_3__["default"].newUser).then(function (response2) {
+        console.log(response2);
+      })["catch"](function (error) {
+        console.log(error);
       });
-    } // login() {
-    //     api.get('/csrf-cookie').then(response => {
-    //         // console.log(response)
-    //         api.post('/login', state.loginFormUser)
-    //         .then(response2 => {
-    //             console.log(response2);
-    //         })
-    //         .catch((error) => {
-    //             console.log(error)
-    //         })
-    //     });
-    // }
+    }
+  }, {
+    key: "login",
+    value: function () {
+      var _login = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var result, loginForm;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return api.get('/csrf-cookie');
 
+              case 2:
+                result = _context.sent;
+                console.log('result', result);
+
+                if (!(result.status !== 204)) {
+                  _context.next = 6;
+                  break;
+                }
+
+                return _context.abrupt("return");
+
+              case 6:
+                _context.next = 8;
+                return api.post('/login', _pages_auth_store_state__WEBPACK_IMPORTED_MODULE_3__["default"].loginFormUser);
+
+              case 8:
+                loginForm = _context.sent;
+                _context.next = 11;
+                return _models_User__WEBPACK_IMPORTED_MODULE_2__["default"].custom('user').get();
+
+              case 11:
+                return _context.abrupt("return", _context.sent);
+
+              case 12:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }));
+
+      function login() {
+        return _login.apply(this, arguments);
+      }
+
+      return login;
+    }()
+  }, {
+    key: "logout",
+    value: function () {
+      var _logout = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        var logout;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return api.post('/logout');
+
+              case 2:
+                logout = _context2.sent;
+
+              case 3:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }));
+
+      function logout() {
+        return _logout.apply(this, arguments);
+      }
+
+      return logout;
+    }()
+  }, {
+    key: "fetchAuthenticatedUser",
+    value: function () {
+      var _fetchAuthenticatedUser = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return _models_User__WEBPACK_IMPORTED_MODULE_2__["default"].custom('user').get();
+
+              case 2:
+                return _context3.abrupt("return", _context3.sent);
+
+              case 3:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
+      }));
+
+      function fetchAuthenticatedUser() {
+        return _fetchAuthenticatedUser.apply(this, arguments);
+      }
+
+      return fetchAuthenticatedUser;
+    }()
   }]);
 
   return UserRepository;
-}(_BaseRepository__WEBPACK_IMPORTED_MODULE_0__["default"]);
+}(_BaseRepository__WEBPACK_IMPORTED_MODULE_1__["default"]);
 
 
 
@@ -6045,8 +6109,20 @@ var userTransformer = /*#__PURE__*/function (_apiTransformer) {
   }
 
   _createClass(userTransformer, null, [{
-    key: "transformFromApiRegisterUser",
-    value: function transformFromApiRegisterUser(item) {
+    key: "transformToApi",
+    value: // static transformFromApiRegisterUser(item) {
+    //     return {
+    //         "username":_.get(item, 'username', null),
+    //     }
+    // }
+    function transformToApi(item) {
+      return {
+        "id": lodash__WEBPACK_IMPORTED_MODULE_1___default().get(item, 'id', null)
+      };
+    }
+  }, {
+    key: "transformToApiRegisterUser",
+    value: function transformToApiRegisterUser(item) {
       return {
         "username": lodash__WEBPACK_IMPORTED_MODULE_1___default().get(item, 'username', null),
         "password": lodash__WEBPACK_IMPORTED_MODULE_1___default().get(item, 'password', null),
@@ -6056,10 +6132,14 @@ var userTransformer = /*#__PURE__*/function (_apiTransformer) {
       };
     }
   }, {
-    key: "transformToApi",
-    value: function transformToApi(item) {
+    key: "transformFromApiAuthenticatedUser",
+    value: function transformFromApiAuthenticatedUser(item) {
       return {
-        "id": lodash__WEBPACK_IMPORTED_MODULE_1___default().get(item, 'id', null)
+        "username": lodash__WEBPACK_IMPORTED_MODULE_1___default().get(item, 'username', null),
+        "password": lodash__WEBPACK_IMPORTED_MODULE_1___default().get(item, 'password', null),
+        "firstName": lodash__WEBPACK_IMPORTED_MODULE_1___default().get(item, 'first_name', null),
+        "lastName": lodash__WEBPACK_IMPORTED_MODULE_1___default().get(item, 'last_name', null),
+        "email": lodash__WEBPACK_IMPORTED_MODULE_1___default().get(item, 'email', null)
       };
     }
   }]);
@@ -6242,7 +6322,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.nav-bar-content[data-v-5dd24bca] {\n    /*position: fixed;*/\n    /*top: 0;*/\n    /*width: 100%;*/\n}\n.nav-bar-btn[data-v-5dd24bca] {\n    padding: 0;\n}\n.drawer-button-text[data-v-5dd24bca] {\n    display: flex;\n    align-items: flex-start;\n}\n.md-primary[data-v-5dd24bca] {\n    display: flex;\n    flex-direction: row;\n    justify-content: flex-start;\n}\n.drawer-button[data-v-5dd24bca] {\n    display: flex;\n    flex-direction: row;\n    align-items: flex-start;\n}\n#link-home[data-v-5dd24bca], #link-products[data-v-5dd24bca], #link-cart[data-v-5dd24bca] {\n    color: black;\n    color: aliceblue;\n    text-decoration: none;\n}\n\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.nav-bar-content[data-v-5dd24bca] {\n    /*position: fixed;*/\n    /*top: 0;*/\n    /*width: 100%;*/\n}\n.nav-bar-btn[data-v-5dd24bca] {\n    padding: 0;\n}\n.drawer-button-text[data-v-5dd24bca] {\n    display: flex;\n    align-items: flex-start;\n}\n.md-primary[data-v-5dd24bca] {\n    display: flex;\n    flex-direction: row;\n    justify-content: flex-start;\n}\n.drawer-button[data-v-5dd24bca] {\n    display: flex;\n    flex-direction: row;\n    align-items: flex-start;\n}\n#link-home[data-v-5dd24bca], #link-products[data-v-5dd24bca], #link-auth[data-v-5dd24bca] {\n    color: black;\n    color: aliceblue;\n    text-decoration: none;\n}\n\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -6338,7 +6418,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.login-content[data-v-71110f7e] {\n    display: flex;\n    flex-direction: column;\n    justify-content: space-around;\n}\n.fields[data-v-71110f7e] {\n    margin: 10px 0 50px 0;\n}\n\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.login-content[data-v-71110f7e] {\n    display: flex;\n    flex-direction: column;\n    justify-content: space-around;\n}\n.fields[data-v-71110f7e] {\n    margin: 10px 0 50px 0;\n}\n#submit-login-btn[data-v-71110f7e] {\n    width: 100%;\n}\n\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -32861,6 +32941,41 @@ var render = function() {
                   )
                 ],
                 1
+              ),
+              _vm._v(" "),
+              _c(
+                "md-list-item",
+                [
+                  _c("md-icon", { staticClass: "fa fa-sign-out" }),
+                  _vm._v(" "),
+                  _c(
+                    "span",
+                    { staticClass: "md-list-item-text" },
+                    [
+                      _c(
+                        "router-link",
+                        { attrs: { id: "link-auth", to: "/" } },
+                        [
+                          _c(
+                            "md-button",
+                            {
+                              staticClass: "drawer-button",
+                              on: { click: _vm.logoutUser }
+                            },
+                            [
+                              _c("p", { staticClass: "drawer-button-text" }, [
+                                _vm._v("Logout")
+                              ])
+                            ]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
               )
             ],
             1
@@ -33115,20 +33230,7 @@ var render = function() {
             staticClass: "md-raised md-primary",
             attrs: { id: "submit-login-btn", type: "submit" }
           },
-          [_vm._v("\n            Login\n        ")]
-        ),
-        _vm._v(" "),
-        _c(
-          "router-link",
-          { attrs: { id: "link-home", to: "/products" } },
-          [
-            _c("md-button", { staticClass: "drawer-button" }, [
-              _c("p", { staticClass: "drawer-button-text" }, [
-                _vm._v("Products")
-              ])
-            ])
-          ],
-          1
+          [_vm._v("\n                Login\n            ")]
         )
       ],
       1
@@ -85923,155 +86025,6 @@ var index = {
 /***/ (() => {
 
 /* (ignored) */
-
-/***/ }),
-
-/***/ "./node_modules/js-cookie/dist/js.cookie.mjs":
-/*!***************************************************!*\
-  !*** ./node_modules/js-cookie/dist/js.cookie.mjs ***!
-  \***************************************************/
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/*! js-cookie v3.0.1 | MIT */
-/* eslint-disable no-var */
-function assign (target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i];
-    for (var key in source) {
-      target[key] = source[key];
-    }
-  }
-  return target
-}
-/* eslint-enable no-var */
-
-/* eslint-disable no-var */
-var defaultConverter = {
-  read: function (value) {
-    if (value[0] === '"') {
-      value = value.slice(1, -1);
-    }
-    return value.replace(/(%[\dA-F]{2})+/gi, decodeURIComponent)
-  },
-  write: function (value) {
-    return encodeURIComponent(value).replace(
-      /%(2[346BF]|3[AC-F]|40|5[BDE]|60|7[BCD])/g,
-      decodeURIComponent
-    )
-  }
-};
-/* eslint-enable no-var */
-
-/* eslint-disable no-var */
-
-function init (converter, defaultAttributes) {
-  function set (key, value, attributes) {
-    if (typeof document === 'undefined') {
-      return
-    }
-
-    attributes = assign({}, defaultAttributes, attributes);
-
-    if (typeof attributes.expires === 'number') {
-      attributes.expires = new Date(Date.now() + attributes.expires * 864e5);
-    }
-    if (attributes.expires) {
-      attributes.expires = attributes.expires.toUTCString();
-    }
-
-    key = encodeURIComponent(key)
-      .replace(/%(2[346B]|5E|60|7C)/g, decodeURIComponent)
-      .replace(/[()]/g, escape);
-
-    var stringifiedAttributes = '';
-    for (var attributeName in attributes) {
-      if (!attributes[attributeName]) {
-        continue
-      }
-
-      stringifiedAttributes += '; ' + attributeName;
-
-      if (attributes[attributeName] === true) {
-        continue
-      }
-
-      // Considers RFC 6265 section 5.2:
-      // ...
-      // 3.  If the remaining unparsed-attributes contains a %x3B (";")
-      //     character:
-      // Consume the characters of the unparsed-attributes up to,
-      // not including, the first %x3B (";") character.
-      // ...
-      stringifiedAttributes += '=' + attributes[attributeName].split(';')[0];
-    }
-
-    return (document.cookie =
-      key + '=' + converter.write(value, key) + stringifiedAttributes)
-  }
-
-  function get (key) {
-    if (typeof document === 'undefined' || (arguments.length && !key)) {
-      return
-    }
-
-    // To prevent the for loop in the first place assign an empty array
-    // in case there are no cookies at all.
-    var cookies = document.cookie ? document.cookie.split('; ') : [];
-    var jar = {};
-    for (var i = 0; i < cookies.length; i++) {
-      var parts = cookies[i].split('=');
-      var value = parts.slice(1).join('=');
-
-      try {
-        var foundKey = decodeURIComponent(parts[0]);
-        jar[foundKey] = converter.read(value, foundKey);
-
-        if (key === foundKey) {
-          break
-        }
-      } catch (e) {}
-    }
-
-    return key ? jar[key] : jar
-  }
-
-  return Object.create(
-    {
-      set: set,
-      get: get,
-      remove: function (key, attributes) {
-        set(
-          key,
-          '',
-          assign({}, attributes, {
-            expires: -1
-          })
-        );
-      },
-      withAttributes: function (attributes) {
-        return init(this.converter, assign({}, this.attributes, attributes))
-      },
-      withConverter: function (converter) {
-        return init(assign({}, this.converter, converter), this.attributes)
-      }
-    },
-    {
-      attributes: { value: Object.freeze(defaultAttributes) },
-      converter: { value: Object.freeze(converter) }
-    }
-  )
-}
-
-var api = init(defaultConverter, { path: '/' });
-/* eslint-enable no-var */
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (api);
-
 
 /***/ }),
 

@@ -2,7 +2,19 @@ import apiTransformer from "./ApiTransformer";
 import _ from 'lodash'
 
 export class userTransformer extends apiTransformer {
-    static transformFromApiRegisterUser(item) {
+    // static transformFromApiRegisterUser(item) {
+    //     return {
+    //         "username":_.get(item, 'username', null),
+    //     }
+    // }
+
+    static transformToApi(item) {
+        return {
+            "id":_.get(item, 'id', null)
+        }
+    }
+
+    static transformToApiRegisterUser(item) {
         return {
             "username":_.get(item, 'username', null),
             "password":_.get(item, 'password', null),
@@ -12,9 +24,13 @@ export class userTransformer extends apiTransformer {
         }
     }
 
-    static transformToApi(item) {
+    static transformFromApiAuthenticatedUser(item) {
         return {
-            "id":_.get(item, 'id', null)
+            "username":_.get(item, 'username', null),
+            "password":_.get(item, 'password', null),
+            "firstName":_.get(item, 'first_name', null),
+            "lastName":_.get(item, 'last_name', null),
+            "email":_.get(item, 'email', null),
         }
     }
 }

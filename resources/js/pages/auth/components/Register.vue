@@ -151,7 +151,7 @@ export default {
         },
         userSaved: false,
         sending: false,
-        currentUser: null,
+        newUser: null,
     }),
     methods: {
         getValidationClass (fieldName) {
@@ -176,7 +176,7 @@ export default {
             this.sending = true
 
             window.setTimeout(() => {
-                this.currentUser = `${this.form.username}`
+                this.newUser = `${this.form.username}`
                 this.userSaved = true
                 this.sending = false
                 this.clearForm()
@@ -187,7 +187,7 @@ export default {
 
             if (!this.$v.$invalid) {
                 this.saveUser()
-                this.$store.dispatch('auth/loadCurrentUser', this.form)
+                this.$store.dispatch('auth/loadNewUser', this.form)
                 this.$store.dispatch('auth/postUser')
             }
         }
