@@ -6,6 +6,10 @@ export default class ProductRepository extends BaseRepository {
         super(Product);
     }
 
+    fetchAllById() {
+        return Product.custom(`products?sort=products.id`).get()
+    }
+
     fetchProductsByTitle(value) {
         return Product.custom(`products?sort=${value}`).get()
     }
@@ -19,9 +23,6 @@ export default class ProductRepository extends BaseRepository {
     }
 
     fetchTable(currentPage, perPage){
-        if(perPage === 'Default') {
-            perPage = '';
-        }
         return Product.custom(`products/table?page=${currentPage}&limit=${perPage}`).get()
     }
 }

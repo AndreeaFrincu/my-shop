@@ -49,9 +49,22 @@
                 </md-list-item>
 
                 <md-list-item>
+                    <md-icon class="fa fa-user"></md-icon>
+                    <span class="md-list-item-text">
+<!--                            <router-link id="link-profile" to="/profile">-->
+                              <md-button
+                                  class="drawer-button"
+                                  @click="accessProfile">
+                                <p class="drawer-button-text">Profile</p>
+                              </md-button>
+<!--                            </router-link>-->
+                        </span>
+                </md-list-item>
+
+                <md-list-item>
                     <md-icon class="fa fa-sign-out"></md-icon>
                         <span class="md-list-item-text">
-                            <router-link id="link-auth" to="/">
+                            <router-link id="link-auth" to="/auth">
                               <md-button
                                   class="drawer-button"
                                   @click="logoutUser">
@@ -78,14 +91,22 @@ export default {
         showSidepanel: false
     }),
     methods: {
-        logoutUser() {
-            this.$store.dispatch('auth/logoutUser')
-            this.$store.dispatch('auth/loginFormUser',
+        async logoutUser() {
+            await this.$store.dispatch('auth/logoutUser')
+            await this.$store.dispatch('auth/loginFormUser',
                 {
                     'username': null,
                     'password': null,
                 })
-            this.$store.dispatch('auth/refreshUserOnLogout',
+            await this.$store.dispatch('auth/refreshUserOnLogout',
+                {
+                    'username': null,
+                    'password': null,
+                    'firstName': null,
+                    'lastName': null,
+                    'email': null,
+                })
+            await this.$store.dispatch('profile/logoutUser',
                 {
                     'username': null,
                     'password': null,
@@ -94,6 +115,17 @@ export default {
                     'email': null,
                 })
         },
+        async accessProfile() {
+            await this.$store.dispatch('auth/loadCurrentUser')
+            if (this.$store.state.auth.authenticatedUser.username !== null) {
+                console.log('access granted')
+                await this.$router.push('/profile')
+            }
+            else {
+                console.log('no user logged in')
+                await this.$router.push('/auth_err')
+            }
+        }
     }
 }
 </script>
@@ -127,8 +159,7 @@ export default {
     align-items: flex-start;
 }
 
-#link-home, #link-products, #link-auth {
-    color: black;
+#link-home, #link-products, #link-auth, #link-profile {
     color: aliceblue;
     text-decoration: none;
 }

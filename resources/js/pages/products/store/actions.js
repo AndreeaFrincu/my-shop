@@ -7,7 +7,7 @@ import state from "./state";
 export default{
     async loadProducts({commit}) {
         const products = await new ProductRepository(new Product())
-            .fetchAll()
+            .fetchAllById()
 
         /** To find out how many products I have in total
          * For pagination */
@@ -49,9 +49,25 @@ export default{
     },
 
     async sendPerPage({commit}) {
-        const products = await new ProductRepository(new Product())
-            .fetchTable(state.currentPage, state.perPage)
+        let products
+        if (state.perPage <= 3) {
+            products = await new ProductRepository(new Product())
+                .fetchTable(state.currentPage, state.perPage)
 
-        commit('setProducts', products.data)
+            commit('setProducts', products.data)
+        }
+        else {
+            products = await new ProductRepository(new Product())
+                .fetchAllById()
+            console.log('no pagination')
+
+            /** To find out how many products I have in total
+             * For pagination */
+            commit('setTotalProducts', products)
+            commit('setProducts', products)
+
+            /** Initial perPage = all products */
+            commit('setPerPage', products.length)
+        }
     }
 }

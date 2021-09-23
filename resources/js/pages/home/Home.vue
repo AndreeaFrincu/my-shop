@@ -1,6 +1,7 @@
 <template>
     <div class="home">
         <nav-bar></nav-bar>
+        <h1>Home</h1>
     </div>
 </template>
 
@@ -11,7 +12,7 @@ export default {
     components: {NavBar},
     data: () => ({
 
-    })
+    }),
 }
 </script>
 

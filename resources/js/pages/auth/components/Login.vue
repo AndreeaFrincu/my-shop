@@ -25,9 +25,12 @@
                 class="md-raised md-primary">
                 Login
             </md-button>
-<!--            <md-button>-->
-<!--                <p>home</p>-->
-<!--            </md-button>-->
+            <router-link to="/products">
+                <md-button
+                id="test-btn">
+                    <p>proceed as guest</p>
+                </md-button>
+            </router-link>
         </form>
     </div>
 </template>
@@ -46,6 +49,7 @@ export default {
             await this.$store.dispatch('auth/loginFormUser', this.login_form)
             await this.$store.dispatch('auth/loginUser')
             if (this.$store.state.auth.authenticatedUser.username !== null) {
+                console.log('user logged in')
                 await this.$router.push('/products')
             }
         }
@@ -65,7 +69,7 @@ export default {
     margin: 10px 0 50px 0;
 }
 
-#submit-login-btn {
+#submit-login-btn, #test-btn {
     width: 100%;
 }
 
