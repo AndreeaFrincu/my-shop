@@ -8,7 +8,10 @@
 import AuthenticationMethod from "./components/AuthenticationMethod"
 export default {
     name: "Auth",
-    components: {AuthenticationMethod}
+    components: {AuthenticationMethod},
+    async mounted() {
+        await this.$store.dispatch('auth/loadCurrentUser')
+    }
 }
 </script>
 

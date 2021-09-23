@@ -30,6 +30,7 @@ export default {
         },
         onPageSelected(perPage) {
             this.$store.commit('products/setPerPage', perPage)
+            this.$store.commit('products/setCurrentPage', 1)
             this.$store.dispatch('products/sendPerPage')
         }
     },

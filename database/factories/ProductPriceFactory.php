@@ -12,14 +12,13 @@ class ProductPriceFactory extends Factory
 
     public function definition()
     {
-        $product_id = mt_rand(1, 6);
 
         $min = 1.20;
         $max = 256.75;
         $price = mt_rand($min, $max) / 10;
 
         return [
-            'product_id' => $product_id,
+            'product_id' => $this->faker->unique()->numberBetween(1,10),
             'price' => $price,
             'start_date' => $this->faker->dateTimeThisYear(),
             'end_date' => $this->faker->dateTimeThisMonth()

@@ -29,7 +29,7 @@ class ProductController extends Controller
                 AllowedFilter::scope('search'),
                 AllowedFilter::trashed()
             ])
-            ->allowedSorts('title', 'price')
+            ->allowedSorts('title', 'price', 'products.id')
             ->get();
     }
 
@@ -37,6 +37,8 @@ class ProductController extends Controller
     {
         $limit = $request->limit ?? 5;
         return QueryBuilder::for(Product::class)
+            ->join('product_prices', 'products.id',
+                '=', 'product_prices.product_id')
             ->paginate($limit);
     }
 

@@ -12,7 +12,7 @@ export default {
     },
 
     async loginFormUser({commit}, form) {
-        commit('setLoginFormUser', form)
+        await commit('setLoginFormUser', form)
     },
 
     async postUser() {
@@ -24,26 +24,26 @@ export default {
 
         let user = userTransformer.transformFromApiAuthenticatedUser(apiUser[0])
 
-        commit('setAuthenticatedUser', user)
-        console.log('auth user', state.authenticatedUser)
+        await commit('setAuthenticatedUser', user)
+        // console.log('auth user', state.authenticatedUser)
     },
 
     async logoutUser() {
         await new UserRepository(new User()).logout()
     },
 
-    // async loadCurrentUser({commit}) {
-    //     let apiUser = await new UserRepository(new User())
-    //         .fetchAuthenticatedUser()
-    //
-    //     let user = userTransformer.transformFromApiAuthenticatedUser(apiUser[0])
-    //
-    //     commit('setAuthenticatedUser', user)
-    //     console.log('auth user', state.authenticatedUser)
-    //
-    // },
+    async loadCurrentUser({commit}) {
+        let apiUser = await new UserRepository(new User())
+            .fetchAuthenticatedUser()
+
+        let user = userTransformer.transformFromApiAuthenticatedUser(apiUser[0])
+
+        await commit('setAuthenticatedUser', user)
+        console.log('auth user', user)
+
+    },
 
     async refreshUserOnLogout({commit}, form) {
-        commit('setAuthenticatedUser', form)
+        await commit('setAuthenticatedUser', form)
     }
 }

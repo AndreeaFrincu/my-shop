@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 /** Products */
-Route::get('/products', [ProductController::class, 'getAll'])->middleware('auth:sanctum');
+Route::get('/products', [ProductController::class, 'getAll']);
 Route::get('/products/table', [ProductController::class, 'getTable']);
 Route::get('/products/{id}', [ProductController::class, 'getOne'])->where('id', '[0-9]+');
 Route::delete('/products/{id}', [ProductController::class, 'delete'])->where('id', '[0-9]+');
@@ -38,10 +38,6 @@ Route::delete('/authors/{id}', [AuthorController::class, 'delete'])->where('id',
 Route::get('/product_prices', [ProductPriceController::class, 'getAll']);
 
 /** Users */
-//Route::middleware('auth:sanctum')->group(function () {
-//    Route::resource('products', ProductController::class);
-//    Route::resource('user', UserController::class);
-//});
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/logout', [UserController::class, 'logout']);
