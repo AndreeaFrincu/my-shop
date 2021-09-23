@@ -21,18 +21,16 @@ class ProductController extends Controller
 
     public function getAll(Request $request)
     {
-        if(Auth::check()) {
-            return QueryBuilder::for(Product::class)
-                ->join('product_prices', 'products.id',
-                    '=', 'product_prices.product_id')
-                ->allowedFilters([
-                    AllowedFilter::exact('genre_id'),
-                    AllowedFilter::scope('search'),
-                    AllowedFilter::trashed()
-                ])
-                ->allowedSorts('title', 'price')
-                ->get();
-        }
+        return QueryBuilder::for(Product::class)
+            ->join('product_prices', 'products.id',
+                '=', 'product_prices.product_id')
+            ->allowedFilters([
+                AllowedFilter::exact('genre_id'),
+                AllowedFilter::scope('search'),
+                AllowedFilter::trashed()
+            ])
+            ->allowedSorts('title', 'price')
+            ->get();
     }
 
     public function getTable(Request $request)

@@ -1,36 +1,47 @@
 import BaseRepository from './BaseRepository'
 import User from "../models/User";
 import state from "../pages/auth/store/state";
-import api from "../authentication/Api";
+import axios from "axios";
+
+let api = axios.create({
+    baseURL: 'http://my-shop.valet/api'
+})
+
+api.defaults.withCredentials = true;
 
 export default class UserRepository extends BaseRepository {
     constructor() {
-        super(User);
+        super(User)
     }
 
     create() {
-        api.get('/csrf-cookie').then(response => {
-            console.log(response)
-            api.post('/register', state.currentUser)
-            .then((response2) => {
-                console.log(response2)
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+        api.post('/register', state.newUser)
+        .then((response2) => {
+            console.log(response2)
+        })
+        .catch((error) => {
+            console.log(error)
         })
     }
 
-    // login() {
-    //     api.get('/csrf-cookie').then(response => {
-    //         // console.log(response)
-    //         api.post('/login', state.loginFormUser)
-    //         .then(response2 => {
-    //             console.log(response2);
-    //         })
-    //         .catch((error) => {
-    //             console.log(error)
-    //         })
-    //     });
-    // }
+    async login() {
+        let result = await api.get('/csrf-cookie')
+        console.log('result', result)
+
+        if(result.status !== 204){
+            return
+        }
+
+        let loginForm = await api.post('/login', state.loginFormUser)
+
+        return await User.custom('user').get()
+    }
+
+    async logout() {
+        let logout = await api.post('/logout')
+    }
+
+    async fetchAuthenticatedUser() {
+        return await User.custom('user').get()
+    }
 }

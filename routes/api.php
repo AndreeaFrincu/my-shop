@@ -38,10 +38,13 @@ Route::delete('/authors/{id}', [AuthorController::class, 'delete'])->where('id',
 Route::get('/product_prices', [ProductPriceController::class, 'getAll']);
 
 /** Users */
-Route::middleware('auth:sanctum')->get('/users', function (Request $request) {
-    return $request->user();
-});
+//Route::middleware('auth:sanctum')->group(function () {
+//    Route::resource('products', ProductController::class);
+//    Route::resource('user', UserController::class);
+//});
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/login', [UserController::class, 'login']);
+Route::post('/logout', [UserController::class, 'logout']);
 Route::get('/users', [UserController::class, 'getAll']);
+Route::get('/user', [UserController::class, 'getCurrent'])->middleware('auth:sanctum');
 

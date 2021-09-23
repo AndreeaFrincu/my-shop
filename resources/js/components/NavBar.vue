@@ -28,24 +28,37 @@
             <md-list>
                 <md-list-item>
                     <md-icon class="fa fa-home"></md-icon>
-                    <span class="md-list-item-text">
-            <router-link id="link-home" to="/home">
-              <md-button class="drawer-button">
-                <p class="drawer-button-text">Home</p>
-              </md-button>
-            </router-link>
-          </span>
+                        <span class="md-list-item-text">
+                            <router-link id="link-home" to="/home">
+                              <md-button class="drawer-button">
+                                <p class="drawer-button-text">Home</p>
+                              </md-button>
+                            </router-link>
+                        </span>
                 </md-list-item>
 
                 <md-list-item>
                     <md-icon class="fa fa-th-large"></md-icon>
-                    <span class="md-list-item-text">
-            <router-link id="link-products" to="/products">
-              <md-button class="drawer-button">
-                <p class="drawer-button-text">Products</p>
-              </md-button>
-            </router-link>
-          </span>
+                        <span class="md-list-item-text">
+                            <router-link id="link-products" to="/products">
+                              <md-button class="drawer-button">
+                                <p class="drawer-button-text">Products</p>
+                              </md-button>
+                            </router-link>
+                        </span>
+                </md-list-item>
+
+                <md-list-item>
+                    <md-icon class="fa fa-sign-out"></md-icon>
+                        <span class="md-list-item-text">
+                            <router-link id="link-auth" to="/">
+                              <md-button
+                                  class="drawer-button"
+                                  @click="logoutUser">
+                                <p class="drawer-button-text">Logout</p>
+                              </md-button>
+                            </router-link>
+                        </span>
                 </md-list-item>
 
             </md-list>
@@ -63,7 +76,25 @@ export default {
     data: () => ({
         showNavigation: false,
         showSidepanel: false
-    })
+    }),
+    methods: {
+        logoutUser() {
+            this.$store.dispatch('auth/logoutUser')
+            this.$store.dispatch('auth/loginFormUser',
+                {
+                    'username': null,
+                    'password': null,
+                })
+            this.$store.dispatch('auth/refreshUserOnLogout',
+                {
+                    'username': null,
+                    'password': null,
+                    'firstName': null,
+                    'lastName': null,
+                    'email': null,
+                })
+        },
+    }
 }
 </script>
 
@@ -96,7 +127,7 @@ export default {
     align-items: flex-start;
 }
 
-#link-home, #link-products, #link-cart {
+#link-home, #link-products, #link-auth {
     color: black;
     color: aliceblue;
     text-decoration: none;

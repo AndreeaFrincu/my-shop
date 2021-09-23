@@ -25,46 +25,29 @@
                 class="md-raised md-primary">
                 Login
             </md-button>
-            <router-link id="link-home" to="/products">
-                <md-button class="drawer-button">
-                    <p class="drawer-button-text">Products</p>
-                </md-button>
-            </router-link>
+<!--            <md-button>-->
+<!--                <p>home</p>-->
+<!--            </md-button>-->
         </form>
     </div>
 </template>
 
 <script>
-import axios from "axios";
-import User from "../../../authentication/User";
-import Csrf from "../../../authentication/Csrf";
-axios.defaults.withCredentials = true
-
 export default {
     name: "Login",
     data:() => ({
         login_form: {
             username: null,
             password: null
-        },
-        header: {
-            'Accept': 'application/json'
         }
     }),
     methods: {
-        loginUser() {
-            this.$store.dispatch('auth/loginFormUser', this.login_form)
-            Csrf.getCookie()
-            User.login(this.login_form, this.header)
-            .then(() => {
-                localStorage.setItem("auth", "true")
-                this.$router.push({name: 'products'})
-            })
-            .catch(error => {
-                if(error.response.status === 422) {
-                    this.errors = error.response.data.errors
-                }
-            })
+        async loginUser() {
+            await this.$store.dispatch('auth/loginFormUser', this.login_form)
+            await this.$store.dispatch('auth/loginUser')
+            if (this.$store.state.auth.authenticatedUser.username !== null) {
+                await this.$router.push('/products')
+            }
         }
     }
 }
@@ -80,6 +63,10 @@ export default {
 
 .fields {
     margin: 10px 0 50px 0;
+}
+
+#submit-login-btn {
+    width: 100%;
 }
 
 </style>

@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use http\Cookie;
+use http\Env\Response;
+use http\Message;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -24,6 +28,12 @@ class UserController extends Controller
     {
         return QueryBuilder::for(User::class)
             ->get();
+    }
+
+    public function getCurrent(Request $request) {
+        if(Auth::user()->id !== null) {
+            return Auth::user();
+        }
     }
 
     public function update()
@@ -64,6 +74,8 @@ class UserController extends Controller
         ]);
 
         if (Auth::attempt($request->only('username', 'password'))) {
+            $request->session()->regenerate();
+
             return response()->json(Auth::user(), 200);
         }
 
@@ -71,6 +83,17 @@ class UserController extends Controller
             'username' => ['The username is incorrect.'],
             'password' => ['The password is incorrect.'],
         ]);
+    }
+
+    public function logout(Request $request) {
+
+        Auth::logout();
+//        Session::flush();
+
+//        $request->session()->invalidate();
+//        $request->session()->regenerateToken();
+
+        return redirect()->back()->with('message', 'logout successful');
     }
 
     public function delete()
