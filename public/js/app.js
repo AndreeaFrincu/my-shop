@@ -2770,7 +2770,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 6:
                 _context.next = 8;
-                return _this.$store.dispatch('profile/logoutUser', {
+                return _this.$store.dispatch('auth/logoutUser', {
                   'username': null,
                   'password': null,
                   'firstName': null,
@@ -2787,42 +2787,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }))();
     },
     accessProfile: function accessProfile() {
-      var _this2 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return _this2.$store.dispatch('auth/loadCurrentUser');
-
-              case 2:
-                if (!(_this2.$store.state.auth.authenticatedUser.username !== null)) {
-                  _context2.next = 8;
-                  break;
-                }
-
-                console.log('access granted');
-                _context2.next = 6;
-                return _this2.$router.push('/profile');
-
-              case 6:
-                _context2.next = 11;
-                break;
-
-              case 8:
-                console.log('no user logged in');
-                _context2.next = 11;
-                return _this2.$router.push('/auth_err');
-
-              case 11:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
-      }))();
+      if (this.$store.state.auth.authenticatedUser.username !== null) {
+        console.log('access granted');
+        this.$router.push('/profile');
+      } else {
+        console.log('no user logged in');
+        this.$router.push('/auth_err');
+      }
     }
   }
 });
@@ -4234,18 +4205,31 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   components: {
     NavBar: _components_NavBar__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
-  mounted: function mounted() {// await this.$store.dispatch('auth/loadCurrentUser')
-    // if (this.$store.state.auth.authenticatedUser.username === null) {
-    //     console.log('no user logged in')
-    //     await this.$router.push('/auth_err')
-    // }
-    // await this.$store.dispatch('auth/loadCurrentUser')
+  mounted: function mounted() {
+    var _this = this;
 
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
+              _context.next = 2;
+              return _this.$store.dispatch('auth/loadCurrentUser');
+
+            case 2:
+              if (!(_this.$store.state.auth.authenticatedUser.username === null)) {
+                _context.next = 5;
+                break;
+              }
+
+              _context.next = 5;
+              return _this.$router.push('/auth_err');
+
+            case 5:
+              _context.next = 7;
+              return _this.$store.dispatch('auth/loadCurrentUser');
+
+            case 7:
             case "end":
               return _context.stop();
           }
@@ -4883,17 +4867,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   loadNewUser: function loadNewUser(_ref, form) {
+    var commit = _ref.commit;
+    commit('setNewUser', form);
+    _state__WEBPACK_IMPORTED_MODULE_3__["default"].newUser = _transformers_UserTransformer__WEBPACK_IMPORTED_MODULE_4__.userTransformer.transformToApiRegisterUser(_state__WEBPACK_IMPORTED_MODULE_3__["default"].newUser); // console.log('verify register', state.newUser)
+  },
+  loginFormUser: function loginFormUser(_ref2, form) {
+    var commit = _ref2.commit;
+    commit('setLoginFormUser', form);
+  },
+  postUser: function postUser() {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-      var commit;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              commit = _ref.commit;
-              commit('setNewUser', form);
-              _state__WEBPACK_IMPORTED_MODULE_3__["default"].newUser = _transformers_UserTransformer__WEBPACK_IMPORTED_MODULE_4__.userTransformer.transformToApiRegisterUser(_state__WEBPACK_IMPORTED_MODULE_3__["default"].newUser); // console.log('verify register', state.newUser)
+              _context.next = 2;
+              return new _repositories_UserRepository__WEBPACK_IMPORTED_MODULE_1__["default"](new _models_User__WEBPACK_IMPORTED_MODULE_2__["default"]()).create();
 
-            case 3:
+            case 2:
             case "end":
               return _context.stop();
           }
@@ -4901,18 +4892,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, _callee);
     }))();
   },
-  loginFormUser: function loginFormUser(_ref2, form) {
+  loginUser: function loginUser(_ref3) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-      var commit;
+      var commit, apiUser, user;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              commit = _ref2.commit;
+              commit = _ref3.commit;
               _context2.next = 3;
-              return commit('setLoginFormUser', form);
+              return new _repositories_UserRepository__WEBPACK_IMPORTED_MODULE_1__["default"](new _models_User__WEBPACK_IMPORTED_MODULE_2__["default"]()).login();
 
             case 3:
+              apiUser = _context2.sent;
+              user = _transformers_UserTransformer__WEBPACK_IMPORTED_MODULE_4__.userTransformer.transformFromApiAuthenticatedUser(apiUser[0]);
+              commit('setAuthenticatedUser', user);
+
+            case 6:
             case "end":
               return _context2.stop();
           }
@@ -4920,14 +4916,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, _callee2);
     }))();
   },
-  postUser: function postUser() {
+  logoutUser: function logoutUser() {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
               _context3.next = 2;
-              return new _repositories_UserRepository__WEBPACK_IMPORTED_MODULE_1__["default"](new _models_User__WEBPACK_IMPORTED_MODULE_2__["default"]()).create();
+              return new _repositories_UserRepository__WEBPACK_IMPORTED_MODULE_1__["default"](new _models_User__WEBPACK_IMPORTED_MODULE_2__["default"]()).logout();
 
             case 2:
             case "end":
@@ -4937,22 +4933,22 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, _callee3);
     }))();
   },
-  loginUser: function loginUser(_ref3) {
+  loadCurrentUser: function loadCurrentUser(_ref4) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
       var commit, apiUser, user;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
         while (1) {
           switch (_context4.prev = _context4.next) {
             case 0:
-              commit = _ref3.commit;
+              commit = _ref4.commit;
               _context4.next = 3;
-              return new _repositories_UserRepository__WEBPACK_IMPORTED_MODULE_1__["default"](new _models_User__WEBPACK_IMPORTED_MODULE_2__["default"]()).login();
+              return new _repositories_UserRepository__WEBPACK_IMPORTED_MODULE_1__["default"](new _models_User__WEBPACK_IMPORTED_MODULE_2__["default"]()).fetchAuthenticatedUser();
 
             case 3:
               apiUser = _context4.sent;
               user = _transformers_UserTransformer__WEBPACK_IMPORTED_MODULE_4__.userTransformer.transformFromApiAuthenticatedUser(apiUser[0]);
-              _context4.next = 7;
-              return commit('setAuthenticatedUser', user);
+              commit('setAuthenticatedUser', user);
+              console.log('auth user', user);
 
             case 7:
             case "end":
@@ -4962,69 +4958,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, _callee4);
     }))();
   },
-  logoutUser: function logoutUser() {
-    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
-        while (1) {
-          switch (_context5.prev = _context5.next) {
-            case 0:
-              _context5.next = 2;
-              return new _repositories_UserRepository__WEBPACK_IMPORTED_MODULE_1__["default"](new _models_User__WEBPACK_IMPORTED_MODULE_2__["default"]()).logout();
-
-            case 2:
-            case "end":
-              return _context5.stop();
-          }
-        }
-      }, _callee5);
-    }))();
-  },
-  loadCurrentUser: function loadCurrentUser(_ref4) {
-    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6() {
-      var commit, apiUser, user;
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
-        while (1) {
-          switch (_context6.prev = _context6.next) {
-            case 0:
-              commit = _ref4.commit;
-              _context6.next = 3;
-              return new _repositories_UserRepository__WEBPACK_IMPORTED_MODULE_1__["default"](new _models_User__WEBPACK_IMPORTED_MODULE_2__["default"]()).fetchAuthenticatedUser();
-
-            case 3:
-              apiUser = _context6.sent;
-              user = _transformers_UserTransformer__WEBPACK_IMPORTED_MODULE_4__.userTransformer.transformFromApiAuthenticatedUser(apiUser[0]);
-              _context6.next = 7;
-              return commit('setAuthenticatedUser', user);
-
-            case 7:
-              console.log('auth user', user);
-
-            case 8:
-            case "end":
-              return _context6.stop();
-          }
-        }
-      }, _callee6);
-    }))();
-  },
   refreshUserOnLogout: function refreshUserOnLogout(_ref5, form) {
-    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee7() {
-      var commit;
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee7$(_context7) {
-        while (1) {
-          switch (_context7.prev = _context7.next) {
-            case 0:
-              commit = _ref5.commit;
-              _context7.next = 3;
-              return commit('setAuthenticatedUser', form);
-
-            case 3:
-            case "end":
-              return _context7.stop();
-          }
-        }
-      }, _callee7);
-    }))();
+    var commit = _ref5.commit;
+    commit('setAuthenticatedUser', form);
   }
 });
 

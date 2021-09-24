@@ -4,15 +4,15 @@ import state from "./state";
 import {userTransformer} from "../../../transformers/UserTransformer";
 
 export default {
-    async loadNewUser({commit}, form) {
+    loadNewUser({commit}, form) {
         commit('setNewUser', form)
 
         state.newUser = userTransformer.transformToApiRegisterUser(state.newUser)
         // console.log('verify register', state.newUser)
     },
 
-    async loginFormUser({commit}, form) {
-        await commit('setLoginFormUser', form)
+    loginFormUser({commit}, form) {
+        commit('setLoginFormUser', form)
     },
 
     async postUser() {
@@ -24,8 +24,7 @@ export default {
 
         let user = userTransformer.transformFromApiAuthenticatedUser(apiUser[0])
 
-        await commit('setAuthenticatedUser', user)
-        // console.log('auth user', state.authenticatedUser)
+        commit('setAuthenticatedUser', user)
     },
 
     async logoutUser() {
@@ -38,12 +37,12 @@ export default {
 
         let user = userTransformer.transformFromApiAuthenticatedUser(apiUser[0])
 
-        await commit('setAuthenticatedUser', user)
+        commit('setAuthenticatedUser', user)
         console.log('auth user', user)
 
     },
 
-    async refreshUserOnLogout({commit}, form) {
-        await commit('setAuthenticatedUser', form)
+    refreshUserOnLogout({commit}, form) {
+        commit('setAuthenticatedUser', form)
     }
 }
