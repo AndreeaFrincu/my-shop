@@ -106,7 +106,7 @@ export default {
                     'lastName': null,
                     'email': null,
                 })
-            await this.$store.dispatch('profile/logoutUser',
+            await this.$store.dispatch('auth/logoutUser',
                 {
                     'username': null,
                     'password': null,
@@ -115,15 +115,14 @@ export default {
                     'email': null,
                 })
         },
-        async accessProfile() {
-            await this.$store.dispatch('auth/loadCurrentUser')
+        accessProfile() {
             if (this.$store.state.auth.authenticatedUser.username !== null) {
                 console.log('access granted')
-                await this.$router.push('/profile')
+                this.$router.push('/profile')
             }
             else {
                 console.log('no user logged in')
-                await this.$router.push('/auth_err')
+                this.$router.push('/auth_err')
             }
         }
     }
