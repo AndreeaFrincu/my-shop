@@ -42,6 +42,22 @@ export default class UserRepository extends BaseRepository {
     }
 
     async fetchAuthenticatedUser() {
-        return await User.custom('user').get()
+        // return await User.custom('user').get()
+        let user = await api.get('/user')
+
+        console.log(user.data)
+
+        if(user.status === 200){
+            return user.data
+        }
+        else {
+            return {
+                'username': null,
+                'password': null,
+                'firstName': null,
+                'lastName': null,
+                'email': null,
+            }
+        }
     }
 }

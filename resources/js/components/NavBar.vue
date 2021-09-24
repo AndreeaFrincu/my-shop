@@ -11,6 +11,8 @@
 
             <span class="md-title">shop</span>
             <div class="md-toolbar-section-end">
+<!--                <md-button-->
+<!--                v-show="isConnected">connected</md-button>-->
                 <nav-bar-cart></nav-bar-cart>
                 <md-button class="nav-bar-btn" @click="showSidepanel = true">
                     <md-icon class="fa fa-info-circle"></md-icon>
@@ -51,20 +53,19 @@
                 <md-list-item>
                     <md-icon class="fa fa-user"></md-icon>
                     <span class="md-list-item-text">
-<!--                            <router-link id="link-profile" to="/profile">-->
+                            <router-link id="link-profile" to="/profile">
                               <md-button
-                                  class="drawer-button"
-                                  @click="accessProfile">
+                                  class="drawer-button">
                                 <p class="drawer-button-text">Profile</p>
                               </md-button>
-<!--                            </router-link>-->
+                            </router-link>
                         </span>
                 </md-list-item>
 
                 <md-list-item>
                     <md-icon class="fa fa-sign-out"></md-icon>
                         <span class="md-list-item-text">
-                            <router-link id="link-auth" to="/auth">
+                            <router-link id="link-auth" to="/">
                               <md-button
                                   class="drawer-button"
                                   @click="logoutUser">
@@ -82,6 +83,7 @@
 
 <script>
 import NavBarCart from "./nav-bar-components/NavBarCart";
+import {mapGetters} from "vuex";
 
 export default {
     name: "NavBar",
@@ -90,40 +92,43 @@ export default {
         showNavigation: false,
         showSidepanel: false
     }),
-    methods: {
-        async logoutUser() {
-            await this.$store.dispatch('auth/logoutUser')
-            await this.$store.dispatch('auth/loginFormUser',
-                {
-                    'username': null,
-                    'password': null,
-                })
-            await this.$store.dispatch('auth/refreshUserOnLogout',
-                {
-                    'username': null,
-                    'password': null,
-                    'firstName': null,
-                    'lastName': null,
-                    'email': null,
-                })
-            await this.$store.dispatch('auth/logoutUser',
-                {
-                    'username': null,
-                    'password': null,
-                    'firstName': null,
-                    'lastName': null,
-                    'email': null,
-                })
+    computed: {
+        isConnected() {
+          if (this.getAuthUser.username !== null) {
+              return true
+          }
+          else {
+              return false
+          }
         },
-        accessProfile() {
-            if (this.$store.state.auth.authenticatedUser.username !== null) {
-                console.log('access granted')
-                this.$router.push('/profile')
-            }
-            else {
-                console.log('no user logged in')
-                this.$router.push('/auth_err')
-            }
+        ...mapGetters({
+            getAuthUser: 'auth/getAuthenticatedUser'
+        })
+
+    },
+    methods: {
+        logoutUser() {
+            this.$store.dispatch('auth/logoutUser')
+            .then(res => {
+                this.$store.dispatch('auth/loginFormUser',
+                    {
+                        'username': null,
+                        'password': null,
+                    })
+                this.$store.dispatch('auth/refreshUserOnLogout',
+                    {
+                        'username': null,
+                        'password': null,
+                        'firstName': null,
+                        'lastName': null,
+                        'email': null,
+                    })
+                console.log('ok')
+            })
+            .catch(err => {
+                console.log('not ok')
+            })
+
         }
     }
 }

@@ -12,9 +12,6 @@ import CheckoutCard from "./components/CheckoutCard";
 export default {
     name: "Checkout",
     components: {NavBar, CheckoutCard},
-    mounted() {
-        this.$store.dispatch('checkout/setCheckout')
-    }
 }
 </script>
 

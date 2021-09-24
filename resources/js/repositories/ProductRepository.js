@@ -7,7 +7,7 @@ export default class ProductRepository extends BaseRepository {
     }
 
     fetchAllById() {
-        return Product.custom(`products?sort=products.id`).get()
+        return Product.custom(`products`).get()
     }
 
     fetchProductsByTitle(value) {

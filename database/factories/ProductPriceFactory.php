@@ -18,7 +18,7 @@ class ProductPriceFactory extends Factory
         $price = mt_rand($min, $max) / 10;
 
         return [
-            'product_id' => $this->faker->unique()->numberBetween(1,10),
+            'product_id' => $this->faker->numberBetween(1,10),
             'price' => $price,
             'start_date' => $this->faker->dateTimeThisYear(),
             'end_date' => $this->faker->dateTimeThisMonth()
