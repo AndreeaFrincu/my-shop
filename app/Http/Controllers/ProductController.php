@@ -22,8 +22,9 @@ class ProductController extends Controller
     public function getAll(Request $request)
     {
         return QueryBuilder::for(Product::class)
-            ->join('product_prices', 'products.id',
+            ->leftJoin('product_prices', 'products.id',
                 '=', 'product_prices.product_id')
+
             ->allowedFilters([
                 AllowedFilter::exact('genre_id'),
                 AllowedFilter::scope('search'),
@@ -37,7 +38,7 @@ class ProductController extends Controller
     {
         $limit = $request->limit ?? 5;
         return QueryBuilder::for(Product::class)
-            ->join('product_prices', 'products.id',
+            ->rightJoin('product_prices', 'products.id',
                 '=', 'product_prices.product_id')
             ->paginate($limit);
     }

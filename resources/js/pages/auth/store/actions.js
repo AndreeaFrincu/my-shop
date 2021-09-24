@@ -35,11 +35,9 @@ export default {
         let apiUser = await new UserRepository(new User())
             .fetchAuthenticatedUser()
 
-        let user = userTransformer.transformFromApiAuthenticatedUser(apiUser[0])
+        let user = userTransformer.transformFromApiAuthenticatedUser(apiUser)
 
         commit('setAuthenticatedUser', user)
-        console.log('auth user', user)
-
     },
 
     refreshUserOnLogout({commit}, form) {

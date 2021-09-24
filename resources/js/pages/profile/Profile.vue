@@ -7,16 +7,10 @@
 
 <script>
 import NavBar from "../../components/NavBar";
+import store from "../../store";
 export default {
     name: "Profile",
     components: {NavBar},
-    async mounted() {
-        await this.$store.dispatch('auth/loadCurrentUser')
-        if (this.$store.state.auth.authenticatedUser.username === null) {
-            await this.$router.push('/auth_err')
-        }
-        await this.$store.dispatch('auth/loadCurrentUser')
-    }
 }
 </script>
 
