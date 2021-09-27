@@ -4133,7 +4133,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _components_NavBar__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../components/NavBar */ "./resources/js/components/NavBar.vue");
-/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../store */ "./resources/js/store/index.js");
+/* harmony import */ var _middleware_auth_auth__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../middleware/auth/auth */ "./resources/js/middleware/auth/auth.js");
 //
 //
 //
@@ -4147,7 +4147,8 @@ __webpack_require__.r(__webpack_exports__);
   name: "Profile",
   components: {
     NavBar: _components_NavBar__WEBPACK_IMPORTED_MODULE_0__["default"]
-  }
+  },
+  mixins: [_middleware_auth_auth__WEBPACK_IMPORTED_MODULE_1__["default"]]
 });
 
 /***/ }),
@@ -4492,6 +4493,33 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_8__["default"]({
   },
   render: function render(h) {
     return h(_App_vue__WEBPACK_IMPORTED_MODULE_1__["default"]);
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/middleware/auth/auth.js":
+/*!**********************************************!*\
+  !*** ./resources/js/middleware/auth/auth.js ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../store */ "./resources/js/store/index.js");
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  beforeRouteEnter: function beforeRouteEnter(to, from, next) {
+    _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch('auth/loadCurrentUser').then(function (response) {
+      next(); // console.log('ok')
+    })["catch"](function (err) {
+      next({
+        name: 'auth_err'
+      }); // console.log('not ok')
+    });
   }
 });
 
@@ -6187,16 +6215,7 @@ function createRouter() {
     }, {
       path: '/profile',
       name: 'profile',
-      component: _pages_profile_Profile__WEBPACK_IMPORTED_MODULE_6__["default"],
-      beforeEnter: function beforeEnter(to, from, next) {
-        _store_index__WEBPACK_IMPORTED_MODULE_8__["default"].dispatch('auth/loadCurrentUser').then(function (response) {
-          next(); // console.log('ok')
-        })["catch"](function (err) {
-          next({
-            name: 'auth_err'
-          }); // console.log('not ok')
-        });
-      }
+      component: _pages_profile_Profile__WEBPACK_IMPORTED_MODULE_6__["default"]
     }, {
       path: '/auth_err',
       name: 'auth_err',
@@ -34949,7 +34968,7 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("span", { staticClass: "book-info-text" }, [
-              _vm._v("price: " + _vm._s(_vm.product.price))
+              _vm._v("price: " + _vm._s(_vm.product.currentPrice.price))
             ])
           ]),
           _vm._v(" "),

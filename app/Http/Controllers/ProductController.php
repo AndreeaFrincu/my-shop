@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use Carbon\Carbon;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -22,15 +22,36 @@ class ProductController extends Controller
     public function getAll(Request $request)
     {
         return QueryBuilder::for(Product::class)
-            ->leftJoin('product_prices', 'products.id',
-                '=', 'product_prices.product_id')
+//            ->withCount('productPrices')
+//            ->having('product_prices_count', '>', 0)
+//            ->whereHas('productPrices', function ($query) {
+//                return $query
+//                    ->where(function ($query) {
+//                        $query->where('start_date', '<', Carbon::today()->format('Y-m-d'))
+//                            ->where('end_date', '>', Carbon::today()->format('Y-m-d'));
+//                    })
+//                    ->orWhere(function ($query) {
+//                        $query->whereNull('start_date')
+//                            ->where('end_date', '>', Carbon::today()->format('Y-m-d'));
+//                    })
+//                    ->orWhere(function ($query) {
+//                        $query->where('start_date', '<', Carbon::today()->format('Y-m-d'))
+//                            ->whereNull('end_date');
+//
+//                    })
+//                    ->orWhere(function ($query) {
+//                        $query->whereNull('start_date')
+//                            ->whereNull('end_date');
+//                    });
+//
+//            })
 
             ->allowedFilters([
                 AllowedFilter::exact('genre_id'),
                 AllowedFilter::scope('search'),
-                AllowedFilter::trashed()
+                AllowedFilter::scope('has_price'),
             ])
-            ->allowedSorts('title', 'price', 'products.id')
+            ->allowedSorts('title', 'currentPrice.price', 'products.id')
             ->get();
     }
 
@@ -55,7 +76,7 @@ class ProductController extends Controller
 
     public function delete(Request $request)
     {
-        Product::where('id',$request->id)->firstOrFail()->delete();
+        Product::where('id', $request->id)->firstOrFail()->delete();
         return response()->json(null);
     }
 

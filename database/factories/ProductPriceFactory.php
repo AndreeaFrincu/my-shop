@@ -20,8 +20,8 @@ class ProductPriceFactory extends Factory
         return [
             'product_id' => $this->faker->numberBetween(1,10),
             'price' => $price,
-            'start_date' => $this->faker->dateTimeThisYear(),
-            'end_date' => $this->faker->dateTimeThisMonth()
+            'start_date' => $this->faker->dateTimeInInterval('-3 years', '+5 days'),
+            'end_date' => $this->faker->dateTimeInInterval('-2 years', '+2 months')
         ];
     }
 }
