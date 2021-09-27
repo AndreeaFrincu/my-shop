@@ -7,10 +7,13 @@
 
 <script>
 import NavBar from "../../components/NavBar";
-import store from "../../store";
+import auth from "../../middleware/auth/auth";
 export default {
     name: "Profile",
     components: {NavBar},
+    mixins: [
+        auth
+    ]
 }
 </script>
 
