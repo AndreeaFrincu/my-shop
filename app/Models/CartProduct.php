@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class CartProduct extends BaseModel
 {
+    protected $with = ['product'];
+
+//    protected $appends = ['cart'];
+
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
@@ -16,5 +20,10 @@ class CartProduct extends BaseModel
     public function cart(): BelongsTo
     {
         return $this->belongsTo(Cart::class);
+    }
+
+    public function getCartAttribute() {
+        return Cart::where('carts.id', '=', $this->cart_id)
+            ->get();
     }
 }

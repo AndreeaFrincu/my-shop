@@ -54,8 +54,6 @@ export default{
             products = await new ProductRepository(new Product())
                 .fetchTable(state.currentPage, state.perPage)
 
-            console.log('products',products.data)
-
             commit('setProducts', products.data)
         }
         else {
@@ -71,5 +69,6 @@ export default{
             /** Initial perPage = all products */
             commit('setPerPage', products.length)
         }
-    }
+    },
+
 }

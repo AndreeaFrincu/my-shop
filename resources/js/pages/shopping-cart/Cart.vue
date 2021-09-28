@@ -13,7 +13,7 @@ export default {
     name: "Cart",
     components: {CartCard, NavBar},
     mounted() {
-        this.$store.dispatch('cart/fetchCart')
+        this.$store.dispatch('cart/loadCurrentUsersCart')
     }
 }
 </script>

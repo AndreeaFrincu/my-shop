@@ -17,16 +17,17 @@ export default {
     components: {Product},
     computed: {
         ...mapGetters({
-            getProducts: 'products/getProducts'
+            getProducts: 'products/getProducts',
+            getItems: 'cart/getItems'
         })
     },
     methods: {
         /** When 'Add to cart' is clicked */
         onProductAdded(product) {
-            let prodList = _.cloneDeep(this.$store.state.cart.itemsList)
+            let prodList = _.cloneDeep(this.getItems)
             let index = prodList.length
-            let currentPrice = product.price
-            const initialPrice = product.price / product.quantity
+            let currentPrice = product.currentPrice.price
+            const initialPrice = product.currentPrice.price / product.quantity
 
             /** If the product is already in the cart (list of items in the store),
              * increase quantity and price */

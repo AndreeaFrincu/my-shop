@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use Carbon\Carbon;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -16,7 +15,9 @@ class ProductController extends Controller
 
     public function getOne(Request $request)
     {
-        return Product::where('id', $request->id)->firstOrFail();
+        return QueryBuilder::for(Product::class)
+            ->where('id', $request->id)
+            ->firstOrFail();
     }
 
     public function getAll(Request $request)

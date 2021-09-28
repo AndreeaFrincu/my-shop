@@ -4,7 +4,7 @@
               rel="stylesheet">
         <md-card class="cart-card">
             <cart-toolbar></cart-toolbar>
-            <cart-list></cart-list>
+            <cart-table></cart-table>
             <div class="bottom-cart">
                 <cart-total v-if="getTotalPrice>0"></cart-total>
                 <router-link id="link-products" to="/checkout">
@@ -19,14 +19,14 @@
 </template>
 
 <script>
-import CartList from "./CartList";
 import CartToolbar from "./CartToolbar";
 import CartTotal from "./CartTotal";
 import {mapGetters} from "vuex";
+import CartTable from "./CartTable";
 
 export default {
     name: "CartCard",
-    components: {CartTotal, CartToolbar, CartList},
+    components: {CartTable, CartTotal, CartToolbar},
     computed: {
         ...mapGetters({
             getTotalPrice: 'cart/getTotalPrice'
