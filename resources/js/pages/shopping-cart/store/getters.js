@@ -1,6 +1,9 @@
 import _ from "lodash";
 
 export default {
+    getCartProducts: state => {
+        return state.cart.cartProducts
+    },
     getItems: state => {
         let result = _.cloneDeep(state.itemsList)
         return result

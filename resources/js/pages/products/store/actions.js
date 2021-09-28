@@ -7,7 +7,7 @@ import state from "./state";
 export default{
     async loadProducts({commit}) {
         const products = await new ProductRepository(new Product())
-            .fetchAllById()
+            .fetchAllProducts()
 
         /** To find out how many products I have in total
          * For pagination */
@@ -58,7 +58,7 @@ export default{
         }
         else {
             products = await new ProductRepository(new Product())
-                .fetchAllById()
+                .fetchAllProducts()
             console.log('no pagination')
 
             /** To find out how many products I have in total
@@ -69,5 +69,6 @@ export default{
             /** Initial perPage = all products */
             commit('setPerPage', products.length)
         }
-    }
+    },
+
 }

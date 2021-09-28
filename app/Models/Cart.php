@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -13,6 +11,8 @@ class Cart extends BaseModel
 
     protected $cascadeDeletes = ['cartProducts'];
 
+    protected $appends = ['cartProducts'];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -21,5 +21,10 @@ class Cart extends BaseModel
     public function cartProducts(): HasMany
     {
         return $this->hasMany(CartProduct::class);
+    }
+
+    public function getCartProductsAttribute() {
+        return CartProduct::where('cart_products.cart_id', '=', $this->id)
+            ->get();
     }
 }

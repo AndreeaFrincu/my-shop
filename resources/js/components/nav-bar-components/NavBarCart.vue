@@ -5,7 +5,7 @@
                 <md-button id="cart-btn" class="nav-bar-btn">
                     <md-icon class="fa fa-shopping-cart"></md-icon>
                 </md-button>
-                <md-badge v-if="changeBadge>0" id="badge" :md-content="changeBadge"></md-badge>
+<!--                <md-badge v-if="changeBadge>0" id="badge" :md-content="changeBadge"></md-badge>-->
             </md-list-item>
         </router-link>
     </div>
@@ -15,9 +15,9 @@
 export default {
     name: "NavBarCart",
     computed: {
-        changeBadge: function () {
-            return this.$store.state.cart.itemsList.length
-        }
+        // changeBadge: function () {
+        //     return this.$store.state.cart.itemsList.length
+        // }
     },
     methods: {},
     data: () => ({
