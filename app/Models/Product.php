@@ -40,8 +40,27 @@ class Product extends BaseModel
         return $query->where("title","like","%".$search."%");
     }
 
-    public function scopeHasPrice($query) {
-        return $query->whereHas('productPrices');
+    public function scopeCurrentPrice($query) {
+        return $query->whereHas('productPrices', function ($query) {
+            return $query
+                ->where(function ($query) {
+                    $query->where('start_date', '<', Carbon::today()->format('Y-m-d'))
+                        ->where('end_date', '>', Carbon::today()->format('Y-m-d'));
+                })
+                ->orWhere(function ($query) {
+                    $query->whereNull('start_date')
+                        ->where('end_date', '>', Carbon::today()->format('Y-m-d'));
+                })
+                ->orWhere(function ($query) {
+                    $query->where('start_date', '<', Carbon::today()->format('Y-m-d'))
+                        ->whereNull('end_date');
+
+                })
+                ->orWhere(function ($query) {
+                    $query->whereNull('start_date')
+                        ->whereNull('end_date');
+                });
+        });
     }
 
     public function getCurrentPriceAttribute()

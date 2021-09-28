@@ -22,34 +22,10 @@ class ProductController extends Controller
     public function getAll(Request $request)
     {
         return QueryBuilder::for(Product::class)
-//            ->withCount('productPrices')
-//            ->having('product_prices_count', '>', 0)
-//            ->whereHas('productPrices', function ($query) {
-//                return $query
-//                    ->where(function ($query) {
-//                        $query->where('start_date', '<', Carbon::today()->format('Y-m-d'))
-//                            ->where('end_date', '>', Carbon::today()->format('Y-m-d'));
-//                    })
-//                    ->orWhere(function ($query) {
-//                        $query->whereNull('start_date')
-//                            ->where('end_date', '>', Carbon::today()->format('Y-m-d'));
-//                    })
-//                    ->orWhere(function ($query) {
-//                        $query->where('start_date', '<', Carbon::today()->format('Y-m-d'))
-//                            ->whereNull('end_date');
-//
-//                    })
-//                    ->orWhere(function ($query) {
-//                        $query->whereNull('start_date')
-//                            ->whereNull('end_date');
-//                    });
-//
-//            })
-
             ->allowedFilters([
                 AllowedFilter::exact('genre_id'),
                 AllowedFilter::scope('search'),
-                AllowedFilter::scope('has_price'),
+                AllowedFilter::scope('current_price'),
             ])
             ->allowedSorts('title', 'currentPrice.price', 'products.id')
             ->get();
@@ -57,11 +33,13 @@ class ProductController extends Controller
 
     public function getTable(Request $request)
     {
+        $page = $request->page ?? 1;
         $limit = $request->limit ?? 5;
         return QueryBuilder::for(Product::class)
-            ->rightJoin('product_prices', 'products.id',
-                '=', 'product_prices.product_id')
-            ->paginate($limit);
+            ->allowedFilters([
+                AllowedFilter::scope('current_price'),
+            ])
+            ->paginate($limit, '*', 'page', $page);
     }
 
     public function update()

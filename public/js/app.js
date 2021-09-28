@@ -5172,7 +5172,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             case 0:
               commit = _ref.commit;
               _context.next = 3;
-              return new _repositories_ProductRepository__WEBPACK_IMPORTED_MODULE_3__["default"](new _models_Product__WEBPACK_IMPORTED_MODULE_1__["default"]()).fetchAllById();
+              return new _repositories_ProductRepository__WEBPACK_IMPORTED_MODULE_3__["default"](new _models_Product__WEBPACK_IMPORTED_MODULE_1__["default"]()).fetchAllProducts();
 
             case 3:
               products = _context.sent;
@@ -5296,7 +5296,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               commit = _ref5.commit;
 
               if (!(_state__WEBPACK_IMPORTED_MODULE_5__["default"].perPage <= 3)) {
-                _context5.next = 8;
+                _context5.next = 9;
                 break;
               }
 
@@ -5305,15 +5305,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
             case 4:
               products = _context5.sent;
+              console.log('products', products.data);
               commit('setProducts', products.data);
-              _context5.next = 15;
+              _context5.next = 16;
               break;
 
-            case 8:
-              _context5.next = 10;
-              return new _repositories_ProductRepository__WEBPACK_IMPORTED_MODULE_3__["default"](new _models_Product__WEBPACK_IMPORTED_MODULE_1__["default"]()).fetchAllById();
+            case 9:
+              _context5.next = 11;
+              return new _repositories_ProductRepository__WEBPACK_IMPORTED_MODULE_3__["default"](new _models_Product__WEBPACK_IMPORTED_MODULE_1__["default"]()).fetchAllProducts();
 
-            case 10:
+            case 11:
               products = _context5.sent;
               console.log('no pagination');
               /** To find out how many products I have in total
@@ -5325,7 +5326,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               commit('setPerPage', products.length);
 
-            case 15:
+            case 16:
             case "end":
               return _context5.stop();
           }
@@ -5908,9 +5909,9 @@ var ProductRepository = /*#__PURE__*/function (_BaseRepository) {
   }
 
   _createClass(ProductRepository, [{
-    key: "fetchAllById",
-    value: function fetchAllById() {
-      return _models_Product__WEBPACK_IMPORTED_MODULE_1__["default"].custom("products").get();
+    key: "fetchAllProducts",
+    value: function fetchAllProducts() {
+      return _models_Product__WEBPACK_IMPORTED_MODULE_1__["default"].custom("products?filter[current_price]=true").get();
     }
   }, {
     key: "fetchProductsByTitle",
@@ -5930,7 +5931,7 @@ var ProductRepository = /*#__PURE__*/function (_BaseRepository) {
   }, {
     key: "fetchTable",
     value: function fetchTable(currentPage, perPage) {
-      return _models_Product__WEBPACK_IMPORTED_MODULE_1__["default"].custom("products/table?page=".concat(currentPage, "&limit=").concat(perPage)).get();
+      return _models_Product__WEBPACK_IMPORTED_MODULE_1__["default"].custom("products/table?filter[current_price]=true&page=".concat(currentPage, "&limit=").concat(perPage)).get();
     }
   }]);
 

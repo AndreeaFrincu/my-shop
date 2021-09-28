@@ -6,8 +6,8 @@ export default class ProductRepository extends BaseRepository {
         super(Product);
     }
 
-    fetchAllById() {
-        return Product.custom(`products`).get()
+    fetchAllProducts() {
+        return Product.custom(`products?filter[current_price]=true`).get()
     }
 
     fetchProductsByTitle(value) {
@@ -23,6 +23,6 @@ export default class ProductRepository extends BaseRepository {
     }
 
     fetchTable(currentPage, perPage){
-        return Product.custom(`products/table?page=${currentPage}&limit=${perPage}`).get()
+        return Product.custom(`products/table?filter[current_price]=true&page=${currentPage}&limit=${perPage}`).get()
     }
 }
