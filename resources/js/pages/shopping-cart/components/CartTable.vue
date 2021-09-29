@@ -20,7 +20,7 @@
                 v-for="prod in cartProducts"
                 :key="prod.id"
             >
-                <md-table-cell md-numeric>{{ prod.id }}</md-table-cell>
+                <md-table-cell>{{ prod.id }}</md-table-cell>
                 <md-table-cell>{{ prod.product.title }}</md-table-cell>
                 <md-table-cell>{{ prod.quantity }}</md-table-cell>
                 <md-table-cell>{{ prod.product.currentPrice.price }}</md-table-cell>
@@ -41,12 +41,6 @@
                 </md-table-cell>
             </md-table-row>
 
-            <md-table-pagination
-                :md-page-size="2"
-                :md-page-options="[1,2,3,4,5,6]"
-                :md-update="updatePagination"
-                :md-data="cartProducts"
-                :md-paginated-data.sync="paginatedProducts" />
 
         </md-table>
     </div>
@@ -54,11 +48,10 @@
 
 <script>
 import {mapGetters} from "vuex";
-import CartTableRow from "./CartTableRow";
 
 export default {
     name: "CartTable",
-    components: {CartTableRow},
+    components: {},
     data: () => ({
         paginatedProducts: [],
     }),
@@ -69,7 +62,7 @@ export default {
     },
     computed: {
         ...mapGetters({
-            cartProducts: 'cart/getCartProducts'
+            cartProducts: 'cart/getCartProducts',
         })
     }
 }

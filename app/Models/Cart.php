@@ -7,11 +7,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Cart extends BaseModel
 {
-    protected $with = ['user'];
+    protected $with = ['user', 'cartProducts'];
 
     protected $cascadeDeletes = ['cartProducts'];
-
-    protected $appends = ['cartProducts'];
 
     public function user(): BelongsTo
     {
@@ -21,10 +19,5 @@ class Cart extends BaseModel
     public function cartProducts(): HasMany
     {
         return $this->hasMany(CartProduct::class);
-    }
-
-    public function getCartProductsAttribute() {
-        return CartProduct::where('cart_products.cart_id', '=', $this->id)
-            ->get();
     }
 }

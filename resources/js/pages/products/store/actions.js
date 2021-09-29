@@ -3,6 +3,11 @@ import Genre from "../../../models/Genre";
 import ProductRepository from "../../../repositories/ProductRepository";
 import GenreRepository from "../../../repositories/GenreRepository";
 import state from "./state";
+import _ from "lodash";
+import productTransformer from "../../../transformers/ProductTransformer";
+import CurrentPriceUtils from "../../../utils/CurrentPriceUtils";
+import genreTransformer from "../../../transformers/GenreTransformer";
+import authorTransformer from "../../../transformers/AuthorTransformer";
 
 export default{
     async loadProducts({commit}) {
@@ -12,9 +17,21 @@ export default{
         /** To find out how many products I have in total
          * For pagination */
         commit('setTotalProducts', products)
-        commit('setProducts', products)
 
-        /** Initial perPage = all products */
+        let transformedProducts = []
+
+        _.forEach(products, function (prod) {
+            prod = productTransformer.transformFromApiProduct(prod)
+            prod.currentPrice = CurrentPriceUtils.useTransformFromApiCurrentPrice(prod.currentPrice)
+            prod.genre = genreTransformer.transformFromApiGenre(prod.genre)
+            prod.author = authorTransformer.transformFromApiAuthor(prod.author)
+            transformedProducts.push(prod)
+        })
+
+        commit('setProducts', transformedProducts)
+
+
+            /** Initial perPage = all products */
         commit('setPerPage', products.length)
     },
 
@@ -30,14 +47,36 @@ export default{
             const products = await new ProductRepository(new Product())
                 .fetchProductsByTitle(state.sortBy)
 
-            commit('setProducts', products)
+            let transformedProducts = []
+
+            _.forEach(products, function (prod) {
+                prod = productTransformer.transformFromApiProduct(prod)
+                prod.currentPrice = CurrentPriceUtils.useTransformFromApiCurrentPrice(prod.currentPrice)
+                prod.genre = genreTransformer.transformFromApiGenre(prod.genre)
+                prod.author = authorTransformer.transformFromApiAuthor(prod.author)
+                transformedProducts.push(prod)
+            })
+
+            commit('setProducts', transformedProducts)
         }
         else if(state.sortBy.includes('price')){
             const products = await new ProductRepository(new Product())
                 .fetchProductsByPrice(state.sortBy)
 
-            commit('setProducts', products)
+            let transformedProducts = []
+
+            _.forEach(products, function (prod) {
+                prod = productTransformer.transformFromApiProduct(prod)
+                prod.currentPrice = CurrentPriceUtils.useTransformFromApiCurrentPrice(prod.currentPrice)
+                prod.genre = genreTransformer.transformFromApiGenre(prod.genre)
+                prod.author = authorTransformer.transformFromApiAuthor(prod.author)
+                transformedProducts.push(prod)
+            })
+
+            commit('setProducts', transformedProducts)
         }
+
+
     },
 
     async filterProducts({commit}) {
@@ -45,7 +84,17 @@ export default{
             .fetchProductByGenre(state.selectedGenreList
                 .map(obj => obj.id).toString())
 
-        commit('setProducts', products)
+        let transformedProducts = []
+
+        _.forEach(products, function (prod) {
+            prod = productTransformer.transformFromApiProduct(prod)
+            prod.currentPrice = CurrentPriceUtils.useTransformFromApiCurrentPrice(prod.currentPrice)
+            prod.genre = genreTransformer.transformFromApiGenre(prod.genre)
+            prod.author = authorTransformer.transformFromApiAuthor(prod.author)
+            transformedProducts.push(prod)
+        })
+
+        commit('setProducts', transformedProducts)
     },
 
     async sendPerPage({commit}) {

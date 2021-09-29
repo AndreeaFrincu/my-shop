@@ -1,5 +1,3 @@
-import _ from "lodash";
-
 export default {
     getTotalProducts: state => {
       return state.totalProducts

@@ -5,8 +5,7 @@ export default {
         return state.cart.cartProducts
     },
     getItems: state => {
-        let result = _.cloneDeep(state.itemsList)
-        return result
+        return _.cloneDeep(state.itemsList)
     },
     getTotalPrice: state => {
         let totalPrice = 0

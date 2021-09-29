@@ -13,9 +13,10 @@ class CartController extends Controller
             ->get();
     }
 
+    /** Get cart by user's id */
     public function getOne(Request $request) {
         return QueryBuilder::for(Cart::class)
-            ->where('id', $request->id)
+            ->where('user_id', $request->id)
             ->firstOrFail();
     }
 }
