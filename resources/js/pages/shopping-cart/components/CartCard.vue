@@ -4,8 +4,10 @@
               rel="stylesheet">
         <md-card class="cart-card">
             <cart-toolbar></cart-toolbar>
-            <cart-table></cart-table>
             <div class="bottom-cart">
+
+                <app-table :data="this.tableData" :columns="tableColumns"> </app-table>
+
                 <cart-total v-if="getTotalPrice>0"></cart-total>
                 <router-link id="link-products" to="/checkout">
                     <md-button v-if="getTotalPrice>0" class="control-btn md-raised md-primary">Checkout</md-button>
@@ -19,18 +21,25 @@
 </template>
 
 <script>
+import {mapGetters} from "vuex";
 import CartToolbar from "./CartToolbar";
 import CartTotal from "./CartTotal";
-import {mapGetters} from "vuex";
-import CartTable from "./CartTable";
+import AppTable from "../../../components/AppTable";
 
 export default {
     name: "CartCard",
-    components: {CartTable, CartTotal, CartToolbar},
+    components: {AppTable, CartTotal, CartToolbar},
     computed: {
         ...mapGetters({
-            getTotalPrice: 'cart/getTotalPrice'
+            getTotalPrice: 'cart/getTotalPrice',
+            tableData: 'cart/getCartProducts',
         })
+    },
+    data() {
+        return {
+            tableColumns: ["ID", "Title", "Quantity", "Price",
+                "Decrease Quantity", "Increase Quantity", "Delete Product"]
+        };
     }
 }
 </script>

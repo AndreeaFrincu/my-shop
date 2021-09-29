@@ -1,9 +1,11 @@
 import _ from "lodash";
 
 export default {
-    setCart(state, value) {
-        state.cart.userId = value.id
-        state.cart.cartProducts = value.cartProducts
+    setProducts(state, value) {
+        state.cart.cartProducts = value
+    },
+    setUserId(state, value) {
+        state.cart.userId = value.userId
     },
     setItems(state, value) {
         //set on store with value

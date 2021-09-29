@@ -5,4 +5,6 @@ export default class CartRepository extends BaseRepository {
     constructor() {
         super(Cart);
     }
+
+
 }
