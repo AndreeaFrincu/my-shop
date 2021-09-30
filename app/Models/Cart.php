@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Cart extends BaseModel
 {
-    protected $with = ['user', 'cartProducts'];
+    protected $with = ['user'];
 
     protected $cascadeDeletes = ['cartProducts'];
 

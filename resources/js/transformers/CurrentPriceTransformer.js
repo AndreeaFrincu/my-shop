@@ -11,8 +11,4 @@ export default class currentPriceTransformer extends apiTransformer{
             "endDate":_.get(item, 'end_date', null),
         }
     }
-
-    static transformToApiProduct(item) {
-        return item.replace( /([A-Z])/g, "_$1" ).toLowerCase();
-    }
 }

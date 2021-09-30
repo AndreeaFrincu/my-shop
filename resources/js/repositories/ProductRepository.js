@@ -11,15 +11,15 @@ export default class ProductRepository extends BaseRepository {
     }
 
     fetchProductsByTitle(value) {
-        return Product.custom(`products?sort=${value}`).get()
+        return Product.custom(`products?filter[current_price]=true&sort=${value}`).get()
     }
 
     fetchProductsByPrice(value) {
-        return Product.custom(`products?sort=${value}`).get()
+        return Product.custom(`products?filter[current_price]=true&sort=${value}`).get()
     }
 
     fetchProductByGenre(genreIds) {
-        return Product.custom(`products?filter[genre_id]=${genreIds}`).get()
+        return Product.custom(`products?filter[current_price]=true&filter[genre_id]=${genreIds}`).get()
     }
 
     fetchTable(currentPage, perPage){
