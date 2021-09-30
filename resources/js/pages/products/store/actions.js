@@ -2,7 +2,6 @@ import Product from "../../../models/Product";
 import Genre from "../../../models/Genre";
 import ProductRepository from "../../../repositories/ProductRepository";
 import GenreRepository from "../../../repositories/GenreRepository";
-import state from "./state";
 import _ from "lodash";
 import productTransformer from "../../../transformers/ProductTransformer";
 import genreTransformer from "../../../transformers/GenreTransformer";
@@ -97,7 +96,7 @@ export default{
         commit('setProducts', transformedProducts)
     },
 
-    async sendPerPage({commit}) {
+    async sendPerPage({commit, state}) {
         let products
         if (state.perPage <= 3) {
             products = await new ProductRepository(new Product())

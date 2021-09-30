@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class CartProduct extends BaseModel
 {
-    protected $with = ['product'];
+    protected $with = ['product', 'cart'];
 
     public function product(): BelongsTo
     {

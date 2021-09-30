@@ -10,5 +10,14 @@ export default {
     },
     getSelectedGenreName: state => {
         return state.selectedGenreList.map(obj => obj.name)
+    },
+    getCurrentPage: state => {
+        return state.currentPage
+    },
+    getPerPage: state => {
+        return state.perPage
+    },
+    getSortBy: state => {
+        return state.sortBy
     }
 }

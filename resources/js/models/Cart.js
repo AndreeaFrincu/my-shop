@@ -1,6 +1,6 @@
 import BaseModel from './BaseModel'
 
-export default class cart extends BaseModel {
+export default class Cart extends BaseModel {
     resource() {
         return 'carts'
     }

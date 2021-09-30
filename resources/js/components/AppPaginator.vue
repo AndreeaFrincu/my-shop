@@ -6,11 +6,11 @@
         <md-divider class="page-divider"></md-divider>
         <paginate
             v-model="computedValue"
-            :clickHandler="changePage"
             :containerClass="'pagination'"
             :page-class="'page-item'"
-            :pageCount="totalPages"
-        ></paginate>
+            :clickHandler="clickHandler"
+            :pageCount="pageCount">
+        </paginate>
 
     </div>
 </template>
@@ -24,21 +24,14 @@ export default {
     props: {
         value: {},
         perPage: {},
-        totalItems: {}
+        totalItems: {},
+        pageCount: {},
+        clickHandler: {},
+        firstItem: {},
+        lastItem: {},
     },
     data: () => ({}),
     computed: {
-        totalPages() {
-            let pageSize = (this.perPage > 0) ? this.perPage : this.totalItems
-            let result = Math.floor(this.totalItems / pageSize)
-            return (this.totalItems % pageSize !== 0) ? result + 1 : result
-        },
-        firstItem() {
-            return this.perPage * this.$store.state.products.currentPage - (this.perPage - 1)
-        },
-        lastItem() {
-            return this.perPage * this.$store.state.products.currentPage
-        },
         computedValue: {
             get() {
                 return this.value
@@ -46,13 +39,6 @@ export default {
             set(value) {
                 this.$store.commit('products/setCurrentPage', value)
             }
-        }
-    },
-    methods: {
-        changePage(currentPage) {
-            // console.log(currentPage)
-            // this.$emit('input', currentPage)
-            this.$store.dispatch('products/sendPerPage');
         }
     }
 }

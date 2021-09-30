@@ -2494,23 +2494,16 @@ __webpack_require__.r(__webpack_exports__);
   props: {
     value: {},
     perPage: {},
-    totalItems: {}
+    totalItems: {},
+    pageCount: {},
+    clickHandler: {},
+    firstItem: {},
+    lastItem: {}
   },
   data: function data() {
     return {};
   },
   computed: {
-    totalPages: function totalPages() {
-      var pageSize = this.perPage > 0 ? this.perPage : this.totalItems;
-      var result = Math.floor(this.totalItems / pageSize);
-      return this.totalItems % pageSize !== 0 ? result + 1 : result;
-    },
-    firstItem: function firstItem() {
-      return this.perPage * this.$store.state.products.currentPage - (this.perPage - 1);
-    },
-    lastItem: function lastItem() {
-      return this.perPage * this.$store.state.products.currentPage;
-    },
     computedValue: {
       get: function get() {
         return this.value;
@@ -2518,13 +2511,6 @@ __webpack_require__.r(__webpack_exports__);
       set: function set(value) {
         this.$store.commit('products/setCurrentPage', value);
       }
-    }
-  },
-  methods: {
-    changePage: function changePage(currentPage) {
-      // console.log(currentPage)
-      // this.$emit('input', currentPage)
-      this.$store.dispatch('products/sendPerPage');
     }
   }
 });
@@ -4087,6 +4073,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_AppPaginator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../components/AppPaginator */ "./resources/js/components/AppPaginator.vue");
 /* harmony import */ var _ProdToolbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ProdToolbar */ "./resources/js/pages/products/components/ProdToolbar.vue");
 /* harmony import */ var _ProdList__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ProdList */ "./resources/js/pages/products/components/ProdList.vue");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -4099,6 +4092,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+
 
 
 
@@ -4109,10 +4107,14 @@ __webpack_require__.r(__webpack_exports__);
     AppPaginator: _components_AppPaginator__WEBPACK_IMPORTED_MODULE_0__["default"],
     ProdList: _ProdList__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
-  computed: {
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)({
+    getCurrentPage: 'products/getCurrentPage',
+    getPerPage: 'products/getPerPage',
+    getTotalProducts: 'products/getTotalProducts'
+  })), {}, {
     currentPage: {
       get: function get() {
-        return this.$store.state.products.currentPage;
+        return this.getCurrentPage;
       },
       set: function set(value) {
         this.$store.commit('products/setCurrentPage', value);
@@ -4120,14 +4122,32 @@ __webpack_require__.r(__webpack_exports__);
     },
     perPage: {
       get: function get() {
-        return this.$store.state.products.perPage;
+        return this.getPerPage;
       },
       set: function set(value) {
         this.$store.commit('products/setPerPage', value);
       }
     },
     totalItems: function totalItems() {
-      return this.$store.getters['products/getTotalProducts'].length;
+      return this.getTotalProducts.length;
+    },
+    totalPages: function totalPages() {
+      var pageSize = this.perPage > 0 ? this.perPage : this.totalItems;
+      var result = Math.floor(this.totalItems / pageSize);
+      return this.totalItems % pageSize !== 0 ? result + 1 : result;
+    },
+    firstItem: function firstItem() {
+      return this.perPage * this.getCurrentPage - (this.perPage - 1);
+    },
+    lastItem: function lastItem() {
+      return this.perPage * this.getCurrentPage;
+    }
+  }),
+  methods: {
+    changePage: function changePage() {
+      // console.log(currentPage)
+      // this.$emit('input', currentPage)
+      this.$store.dispatch('products/sendPerPage');
     }
   }
 });
@@ -4236,7 +4256,7 @@ __webpack_require__.r(__webpack_exports__);
     NavBar: _components_NavBar__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   mounted: function mounted() {
-    this.$store.dispatch('cart/loadCurrentUsersCart');
+    this.$store.dispatch('cart/paginateCartTable');
   }
 });
 
@@ -4551,16 +4571,16 @@ var Model = /*#__PURE__*/function (_BaseModel) {
 
 /***/ }),
 
-/***/ "./resources/js/models/Cart.js":
-/*!*************************************!*\
-  !*** ./resources/js/models/Cart.js ***!
-  \*************************************/
+/***/ "./resources/js/models/CartProduct.js":
+/*!********************************************!*\
+  !*** ./resources/js/models/CartProduct.js ***!
+  \********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ cart)
+/* harmony export */   "default": () => (/* binding */ CartProduct)
 /* harmony export */ });
 /* harmony import */ var _BaseModel__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./BaseModel */ "./resources/js/models/BaseModel.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -4587,25 +4607,25 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
-var cart = /*#__PURE__*/function (_BaseModel) {
-  _inherits(cart, _BaseModel);
+var CartProduct = /*#__PURE__*/function (_BaseModel) {
+  _inherits(CartProduct, _BaseModel);
 
-  var _super = _createSuper(cart);
+  var _super = _createSuper(CartProduct);
 
-  function cart() {
-    _classCallCheck(this, cart);
+  function CartProduct() {
+    _classCallCheck(this, CartProduct);
 
     return _super.apply(this, arguments);
   }
 
-  _createClass(cart, [{
+  _createClass(CartProduct, [{
     key: "resource",
     value: function resource() {
-      return 'carts';
+      return 'cart_products';
     }
   }]);
 
-  return cart;
+  return CartProduct;
 }(_BaseModel__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 
@@ -5169,19 +5189,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _models_Genre__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../models/Genre */ "./resources/js/models/Genre.js");
 /* harmony import */ var _repositories_ProductRepository__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../repositories/ProductRepository */ "./resources/js/repositories/ProductRepository.js");
 /* harmony import */ var _repositories_GenreRepository__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../repositories/GenreRepository */ "./resources/js/repositories/GenreRepository.js");
-/* harmony import */ var _state__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./state */ "./resources/js/pages/products/store/state.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _transformers_ProductTransformer__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../transformers/ProductTransformer */ "./resources/js/transformers/ProductTransformer.js");
-/* harmony import */ var _transformers_GenreTransformer__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../transformers/GenreTransformer */ "./resources/js/transformers/GenreTransformer.js");
-/* harmony import */ var _transformers_AuthorTransformer__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../transformers/AuthorTransformer */ "./resources/js/transformers/AuthorTransformer.js");
-/* harmony import */ var _transformers_CurrentPriceTransformer__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../transformers/CurrentPriceTransformer */ "./resources/js/transformers/CurrentPriceTransformer.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _transformers_ProductTransformer__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../transformers/ProductTransformer */ "./resources/js/transformers/ProductTransformer.js");
+/* harmony import */ var _transformers_GenreTransformer__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../transformers/GenreTransformer */ "./resources/js/transformers/GenreTransformer.js");
+/* harmony import */ var _transformers_AuthorTransformer__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../transformers/AuthorTransformer */ "./resources/js/transformers/AuthorTransformer.js");
+/* harmony import */ var _transformers_CurrentPriceTransformer__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../transformers/CurrentPriceTransformer */ "./resources/js/transformers/CurrentPriceTransformer.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 
 
 
@@ -5212,11 +5230,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               commit('setTotalProducts', products);
               transformedProducts = [];
 
-              lodash__WEBPACK_IMPORTED_MODULE_6___default().forEach(products, function (prod) {
-                prod = _transformers_ProductTransformer__WEBPACK_IMPORTED_MODULE_7__["default"].transformFromApiProduct(prod);
-                prod.currentPrice = _transformers_CurrentPriceTransformer__WEBPACK_IMPORTED_MODULE_10__["default"].transformFromApiCurrentPrice(prod.currentPrice);
-                prod.genre = _transformers_GenreTransformer__WEBPACK_IMPORTED_MODULE_8__["default"].transformFromApiGenre(prod.genre);
-                prod.author = _transformers_AuthorTransformer__WEBPACK_IMPORTED_MODULE_9__["default"].transformFromApiAuthor(prod.author);
+              lodash__WEBPACK_IMPORTED_MODULE_5___default().forEach(products, function (prod) {
+                prod = _transformers_ProductTransformer__WEBPACK_IMPORTED_MODULE_6__["default"].transformFromApiProduct(prod);
+                prod.currentPrice = _transformers_CurrentPriceTransformer__WEBPACK_IMPORTED_MODULE_9__["default"].transformFromApiCurrentPrice(prod.currentPrice);
+                prod.genre = _transformers_GenreTransformer__WEBPACK_IMPORTED_MODULE_7__["default"].transformFromApiGenre(prod.genre);
+                prod.author = _transformers_AuthorTransformer__WEBPACK_IMPORTED_MODULE_8__["default"].transformFromApiAuthor(prod.author);
                 transformedProducts.push(prod);
               });
 
@@ -5266,23 +5284,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             case 0:
               commit = _ref3.commit;
 
-              if (!_state__WEBPACK_IMPORTED_MODULE_5__["default"].sortBy.includes('title')) {
+              if (!state.sortBy.includes('title')) {
                 _context3.next = 10;
                 break;
               }
 
               _context3.next = 4;
-              return new _repositories_ProductRepository__WEBPACK_IMPORTED_MODULE_3__["default"](new _models_Product__WEBPACK_IMPORTED_MODULE_1__["default"]()).fetchProductsByTitle(_state__WEBPACK_IMPORTED_MODULE_5__["default"].sortBy);
+              return new _repositories_ProductRepository__WEBPACK_IMPORTED_MODULE_3__["default"](new _models_Product__WEBPACK_IMPORTED_MODULE_1__["default"]()).fetchProductsByTitle(state.sortBy);
 
             case 4:
               products = _context3.sent;
               transformedProducts = [];
 
-              lodash__WEBPACK_IMPORTED_MODULE_6___default().forEach(products, function (prod) {
-                prod = _transformers_ProductTransformer__WEBPACK_IMPORTED_MODULE_7__["default"].transformFromApiProduct(prod);
-                prod.currentPrice = _transformers_CurrentPriceTransformer__WEBPACK_IMPORTED_MODULE_10__["default"].transformFromApiCurrentPrice(prod.currentPrice);
-                prod.genre = _transformers_GenreTransformer__WEBPACK_IMPORTED_MODULE_8__["default"].transformFromApiGenre(prod.genre);
-                prod.author = _transformers_AuthorTransformer__WEBPACK_IMPORTED_MODULE_9__["default"].transformFromApiAuthor(prod.author);
+              lodash__WEBPACK_IMPORTED_MODULE_5___default().forEach(products, function (prod) {
+                prod = _transformers_ProductTransformer__WEBPACK_IMPORTED_MODULE_6__["default"].transformFromApiProduct(prod);
+                prod.currentPrice = _transformers_CurrentPriceTransformer__WEBPACK_IMPORTED_MODULE_9__["default"].transformFromApiCurrentPrice(prod.currentPrice);
+                prod.genre = _transformers_GenreTransformer__WEBPACK_IMPORTED_MODULE_7__["default"].transformFromApiGenre(prod.genre);
+                prod.author = _transformers_AuthorTransformer__WEBPACK_IMPORTED_MODULE_8__["default"].transformFromApiAuthor(prod.author);
                 transformedProducts.push(prod);
               });
 
@@ -5291,23 +5309,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               break;
 
             case 10:
-              if (!_state__WEBPACK_IMPORTED_MODULE_5__["default"].sortBy.includes('price')) {
+              if (!state.sortBy.includes('price')) {
                 _context3.next = 17;
                 break;
               }
 
               _context3.next = 13;
-              return new _repositories_ProductRepository__WEBPACK_IMPORTED_MODULE_3__["default"](new _models_Product__WEBPACK_IMPORTED_MODULE_1__["default"]()).fetchProductsByPrice(_state__WEBPACK_IMPORTED_MODULE_5__["default"].sortBy);
+              return new _repositories_ProductRepository__WEBPACK_IMPORTED_MODULE_3__["default"](new _models_Product__WEBPACK_IMPORTED_MODULE_1__["default"]()).fetchProductsByPrice(state.sortBy);
 
             case 13:
               _products = _context3.sent;
               _transformedProducts = [];
 
-              lodash__WEBPACK_IMPORTED_MODULE_6___default().forEach(_products, function (prod) {
-                prod = _transformers_ProductTransformer__WEBPACK_IMPORTED_MODULE_7__["default"].transformFromApiProduct(prod);
-                prod.currentPrice = _transformers_CurrentPriceTransformer__WEBPACK_IMPORTED_MODULE_10__["default"].transformFromApiCurrentPrice(prod.currentPrice);
-                prod.genre = _transformers_GenreTransformer__WEBPACK_IMPORTED_MODULE_8__["default"].transformFromApiGenre(prod.genre);
-                prod.author = _transformers_AuthorTransformer__WEBPACK_IMPORTED_MODULE_9__["default"].transformFromApiAuthor(prod.author);
+              lodash__WEBPACK_IMPORTED_MODULE_5___default().forEach(_products, function (prod) {
+                prod = _transformers_ProductTransformer__WEBPACK_IMPORTED_MODULE_6__["default"].transformFromApiProduct(prod);
+                prod.currentPrice = _transformers_CurrentPriceTransformer__WEBPACK_IMPORTED_MODULE_9__["default"].transformFromApiCurrentPrice(prod.currentPrice);
+                prod.genre = _transformers_GenreTransformer__WEBPACK_IMPORTED_MODULE_7__["default"].transformFromApiGenre(prod.genre);
+                prod.author = _transformers_AuthorTransformer__WEBPACK_IMPORTED_MODULE_8__["default"].transformFromApiAuthor(prod.author);
 
                 _transformedProducts.push(prod);
               });
@@ -5331,7 +5349,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             case 0:
               commit = _ref4.commit;
               _context4.next = 3;
-              return new _repositories_ProductRepository__WEBPACK_IMPORTED_MODULE_3__["default"](new _models_Product__WEBPACK_IMPORTED_MODULE_1__["default"]()).fetchProductByGenre(_state__WEBPACK_IMPORTED_MODULE_5__["default"].selectedGenreList.map(function (obj) {
+              return new _repositories_ProductRepository__WEBPACK_IMPORTED_MODULE_3__["default"](new _models_Product__WEBPACK_IMPORTED_MODULE_1__["default"]()).fetchProductByGenre(state.selectedGenreList.map(function (obj) {
                 return obj.id;
               }).toString());
 
@@ -5339,11 +5357,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               products = _context4.sent;
               transformedProducts = [];
 
-              lodash__WEBPACK_IMPORTED_MODULE_6___default().forEach(products, function (prod) {
-                prod = _transformers_ProductTransformer__WEBPACK_IMPORTED_MODULE_7__["default"].transformFromApiProduct(prod);
-                prod.currentPrice = _transformers_CurrentPriceTransformer__WEBPACK_IMPORTED_MODULE_10__["default"].transformFromApiCurrentPrice(prod.currentPrice);
-                prod.genre = _transformers_GenreTransformer__WEBPACK_IMPORTED_MODULE_8__["default"].transformFromApiGenre(prod.genre);
-                prod.author = _transformers_AuthorTransformer__WEBPACK_IMPORTED_MODULE_9__["default"].transformFromApiAuthor(prod.author);
+              lodash__WEBPACK_IMPORTED_MODULE_5___default().forEach(products, function (prod) {
+                prod = _transformers_ProductTransformer__WEBPACK_IMPORTED_MODULE_6__["default"].transformFromApiProduct(prod);
+                prod.currentPrice = _transformers_CurrentPriceTransformer__WEBPACK_IMPORTED_MODULE_9__["default"].transformFromApiCurrentPrice(prod.currentPrice);
+                prod.genre = _transformers_GenreTransformer__WEBPACK_IMPORTED_MODULE_7__["default"].transformFromApiGenre(prod.genre);
+                prod.author = _transformers_AuthorTransformer__WEBPACK_IMPORTED_MODULE_8__["default"].transformFromApiAuthor(prod.author);
                 transformedProducts.push(prod);
               });
 
@@ -5359,20 +5377,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   sendPerPage: function sendPerPage(_ref5) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
-      var commit, products;
+      var commit, state, products;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
         while (1) {
           switch (_context5.prev = _context5.next) {
             case 0:
-              commit = _ref5.commit;
+              commit = _ref5.commit, state = _ref5.state;
 
-              if (!(_state__WEBPACK_IMPORTED_MODULE_5__["default"].perPage <= 3)) {
+              if (!(state.perPage <= 3)) {
                 _context5.next = 8;
                 break;
               }
 
               _context5.next = 4;
-              return new _repositories_ProductRepository__WEBPACK_IMPORTED_MODULE_3__["default"](new _models_Product__WEBPACK_IMPORTED_MODULE_1__["default"]()).fetchTable(_state__WEBPACK_IMPORTED_MODULE_5__["default"].currentPage, _state__WEBPACK_IMPORTED_MODULE_5__["default"].perPage);
+              return new _repositories_ProductRepository__WEBPACK_IMPORTED_MODULE_3__["default"](new _models_Product__WEBPACK_IMPORTED_MODULE_1__["default"]()).fetchTable(state.currentPage, state.perPage);
 
             case 4:
               products = _context5.sent;
@@ -5433,6 +5451,15 @@ __webpack_require__.r(__webpack_exports__);
     return state.selectedGenreList.map(function (obj) {
       return obj.name;
     });
+  },
+  getCurrentPage: function getCurrentPage(state) {
+    return state.currentPage;
+  },
+  getPerPage: function getPerPage(state) {
+    return state.perPage;
+  },
+  getSortBy: function getSortBy(state) {
+    return state.sortBy;
   }
 });
 
@@ -5635,16 +5662,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _repositories_CartRepository__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../repositories/CartRepository */ "./resources/js/repositories/CartRepository.js");
-/* harmony import */ var _models_Cart__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../models/Cart */ "./resources/js/models/Cart.js");
-/* harmony import */ var _transformers_CartTransformer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../transformers/CartTransformer */ "./resources/js/transformers/CartTransformer.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _transformers_CartProductTransformer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../transformers/CartProductTransformer */ "./resources/js/transformers/CartProductTransformer.js");
-/* harmony import */ var _transformers_ProductTransformer__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../transformers/ProductTransformer */ "./resources/js/transformers/ProductTransformer.js");
-/* harmony import */ var _transformers_CurrentPriceTransformer__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../transformers/CurrentPriceTransformer */ "./resources/js/transformers/CurrentPriceTransformer.js");
-/* harmony import */ var _transformers_AuthorTransformer__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../transformers/AuthorTransformer */ "./resources/js/transformers/AuthorTransformer.js");
-/* harmony import */ var _transformers_GenreTransformer__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../transformers/GenreTransformer */ "./resources/js/transformers/GenreTransformer.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _transformers_CartProductTransformer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../transformers/CartProductTransformer */ "./resources/js/transformers/CartProductTransformer.js");
+/* harmony import */ var _transformers_ProductTransformer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../transformers/ProductTransformer */ "./resources/js/transformers/ProductTransformer.js");
+/* harmony import */ var _transformers_CurrentPriceTransformer__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../transformers/CurrentPriceTransformer */ "./resources/js/transformers/CurrentPriceTransformer.js");
+/* harmony import */ var _transformers_AuthorTransformer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../transformers/AuthorTransformer */ "./resources/js/transformers/AuthorTransformer.js");
+/* harmony import */ var _transformers_GenreTransformer__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../transformers/GenreTransformer */ "./resources/js/transformers/GenreTransformer.js");
+/* harmony import */ var _transformers_CartTransformer__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../transformers/CartTransformer */ "./resources/js/transformers/CartTransformer.js");
+/* harmony import */ var _repositories_CartProductRepository__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../repositories/CartProductRepository */ "./resources/js/repositories/CartProductRepository.js");
+/* harmony import */ var _models_CartProduct__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../models/CartProduct */ "./resources/js/models/CartProduct.js");
+/* harmony import */ var _transformers_UserTransformer__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../transformers/UserTransformer */ "./resources/js/transformers/UserTransformer.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -5660,38 +5688,38 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   loadCurrentUsersCart: function loadCurrentUsersCart(_ref) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-      var commit, state, cart, cartTransformed, products;
+      var commit, state, cartProducts, cartTransformed, products;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
               commit = _ref.commit, state = _ref.state;
               _context.next = 3;
-              return new _repositories_CartRepository__WEBPACK_IMPORTED_MODULE_1__["default"](new _models_Cart__WEBPACK_IMPORTED_MODULE_2__["default"]()).fetchOne(4);
+              return new _repositories_CartProductRepository__WEBPACK_IMPORTED_MODULE_8__["default"](new _models_CartProduct__WEBPACK_IMPORTED_MODULE_9__["default"]()).fetchCartProductsByUserId(1);
 
             case 3:
-              cart = _context.sent;
-              cart = _transformers_CartTransformer__WEBPACK_IMPORTED_MODULE_3__.cartTransformer.transformFromApiCart(cart); // console.log(cart)
-
-              commit('setUserId', cart);
+              cartProducts = _context.sent;
               cartTransformed = [];
 
-              lodash__WEBPACK_IMPORTED_MODULE_4___default().forEach(cart.cartProducts, function (product) {
-                product = _transformers_CartProductTransformer__WEBPACK_IMPORTED_MODULE_5__.cartProductTransformer.transformFromApiCartProduct(product);
-                product.product = _transformers_ProductTransformer__WEBPACK_IMPORTED_MODULE_6__["default"].transformFromApiProduct(product.product);
-                product.product.currentPrice = _transformers_CurrentPriceTransformer__WEBPACK_IMPORTED_MODULE_7__["default"].transformFromApiCurrentPrice(product.product.currentPrice);
-                product.product.author = _transformers_AuthorTransformer__WEBPACK_IMPORTED_MODULE_8__["default"].transformFromApiAuthor(product.product.author);
-                product.product.genre = _transformers_GenreTransformer__WEBPACK_IMPORTED_MODULE_9__["default"].transformFromApiGenre(product.product.genre);
+              lodash__WEBPACK_IMPORTED_MODULE_1___default().forEach(cartProducts, function (product) {
+                product = _transformers_CartProductTransformer__WEBPACK_IMPORTED_MODULE_2__["default"].transformFromApiCartProduct(product);
+                product.product = _transformers_ProductTransformer__WEBPACK_IMPORTED_MODULE_3__["default"].transformFromApiProduct(product.product);
+                product.product.currentPrice = _transformers_CurrentPriceTransformer__WEBPACK_IMPORTED_MODULE_4__["default"].transformFromApiCurrentPrice(product.product.currentPrice);
+                product.product.author = _transformers_AuthorTransformer__WEBPACK_IMPORTED_MODULE_5__["default"].transformFromApiAuthor(product.product.author);
+                product.product.genre = _transformers_GenreTransformer__WEBPACK_IMPORTED_MODULE_6__["default"].transformFromApiGenre(product.product.genre);
+                product.cart = _transformers_CartTransformer__WEBPACK_IMPORTED_MODULE_7__["default"].transformFromApiCart(product.cart);
+                product.cart.user = _transformers_UserTransformer__WEBPACK_IMPORTED_MODULE_10__.userTransformer.transformFromApiAuthenticatedUser(product.product.genre);
                 cartTransformed.push(product);
-              }); // console.log(cartTransformed)
+              });
 
-
+              commit('setUserId', cartTransformed[0].cart);
               commit('setProducts', cartTransformed);
-              products = lodash__WEBPACK_IMPORTED_MODULE_4___default().cloneDeep(cart.cartProducts);
-              products = lodash__WEBPACK_IMPORTED_MODULE_4___default().map(products, function (product) {
+              products = lodash__WEBPACK_IMPORTED_MODULE_1___default().cloneDeep(cartTransformed);
+              products = lodash__WEBPACK_IMPORTED_MODULE_1___default().map(products, function (product) {
                 commit('setProdLastId', 1);
                 return {
                   id: state.cartProdLastId,
@@ -5699,16 +5727,64 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   quantity: product.quantity,
                   price: product.product.currentPrice.price
                 };
-              }); // console.log('final', products)
-
+              });
               commit('setDataForCartTable', products);
 
-            case 12:
+            case 11:
             case "end":
               return _context.stop();
           }
         }
       }, _callee);
+    }))();
+  },
+  paginateCartTable: function paginateCartTable(_ref2) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+      var commit, state, products, cartTransformed, productsTransformed;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              commit = _ref2.commit, state = _ref2.state;
+              _context2.next = 3;
+              return new _repositories_CartProductRepository__WEBPACK_IMPORTED_MODULE_8__["default"](new _models_CartProduct__WEBPACK_IMPORTED_MODULE_9__["default"]()).fetchTable(state.currentPage, state.perPage);
+
+            case 3:
+              products = _context2.sent;
+              console.log('before', products.data);
+              cartTransformed = [];
+
+              lodash__WEBPACK_IMPORTED_MODULE_1___default().forEach(products.data, function (product) {
+                product = _transformers_CartProductTransformer__WEBPACK_IMPORTED_MODULE_2__["default"].transformFromApiCartProduct(product);
+                product.product = _transformers_ProductTransformer__WEBPACK_IMPORTED_MODULE_3__["default"].transformFromApiProduct(product.product);
+                product.product.currentPrice = _transformers_CurrentPriceTransformer__WEBPACK_IMPORTED_MODULE_4__["default"].transformFromApiCurrentPrice(product.product.currentPrice);
+                product.product.author = _transformers_AuthorTransformer__WEBPACK_IMPORTED_MODULE_5__["default"].transformFromApiAuthor(product.product.author);
+                product.product.genre = _transformers_GenreTransformer__WEBPACK_IMPORTED_MODULE_6__["default"].transformFromApiGenre(product.product.genre);
+                product.cart = _transformers_CartTransformer__WEBPACK_IMPORTED_MODULE_7__["default"].transformFromApiCart(product.cart);
+                product.cart.user = _transformers_UserTransformer__WEBPACK_IMPORTED_MODULE_10__.userTransformer.transformFromApiAuthenticatedUser(product.product.genre);
+                cartTransformed.push(product);
+              });
+
+              commit('setUserId', cartTransformed[0].cart);
+              commit('setProducts', cartTransformed);
+              productsTransformed = lodash__WEBPACK_IMPORTED_MODULE_1___default().cloneDeep(cartTransformed);
+              productsTransformed = lodash__WEBPACK_IMPORTED_MODULE_1___default().map(productsTransformed, function (product) {
+                commit('setProdLastId', 1);
+                return {
+                  id: state.cartProdLastId,
+                  title: product.product.title,
+                  quantity: product.quantity,
+                  price: product.product.currentPrice.price
+                };
+              });
+              commit('setDataForCartTable', productsTransformed);
+
+            case 12:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2);
     }))();
   }
 });
@@ -5838,7 +5914,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   cart: _utils_CartDataUtils__WEBPACK_IMPORTED_MODULE_0__["default"].createCartData(),
   tableData: [],
-  cartProdLastId: 0
+  cartProdLastId: 0,
+  perPage: 2,
+  currentPage: 1
 });
 
 /***/ }),
@@ -5950,22 +6028,26 @@ var BaseRepository = /*#__PURE__*/function () {
 
 /***/ }),
 
-/***/ "./resources/js/repositories/CartRepository.js":
-/*!*****************************************************!*\
-  !*** ./resources/js/repositories/CartRepository.js ***!
-  \*****************************************************/
+/***/ "./resources/js/repositories/CartProductRepository.js":
+/*!************************************************************!*\
+  !*** ./resources/js/repositories/CartProductRepository.js ***!
+  \************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ CartRepository)
+/* harmony export */   "default": () => (/* binding */ CartProductRepository)
 /* harmony export */ });
 /* harmony import */ var _BaseRepository__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./BaseRepository */ "./resources/js/repositories/BaseRepository.js");
-/* harmony import */ var _models_Cart__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../models/Cart */ "./resources/js/models/Cart.js");
+/* harmony import */ var _models_CartProduct__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../models/CartProduct */ "./resources/js/models/CartProduct.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
@@ -5984,18 +6066,30 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
-var CartRepository = /*#__PURE__*/function (_BaseRepository) {
-  _inherits(CartRepository, _BaseRepository);
+var CartProductRepository = /*#__PURE__*/function (_BaseRepository) {
+  _inherits(CartProductRepository, _BaseRepository);
 
-  var _super = _createSuper(CartRepository);
+  var _super = _createSuper(CartProductRepository);
 
-  function CartRepository() {
-    _classCallCheck(this, CartRepository);
+  function CartProductRepository() {
+    _classCallCheck(this, CartProductRepository);
 
-    return _super.call(this, _models_Cart__WEBPACK_IMPORTED_MODULE_1__["default"]);
+    return _super.call(this, _models_CartProduct__WEBPACK_IMPORTED_MODULE_1__["default"]);
   }
 
-  return CartRepository;
+  _createClass(CartProductRepository, [{
+    key: "fetchCartProductsByUserId",
+    value: function fetchCartProductsByUserId(value) {
+      return _models_CartProduct__WEBPACK_IMPORTED_MODULE_1__["default"].custom("cart_products?filter[cart.user_id]=".concat(value)).get();
+    }
+  }, {
+    key: "fetchTable",
+    value: function fetchTable(currentPage, perPage) {
+      return _models_CartProduct__WEBPACK_IMPORTED_MODULE_1__["default"].custom("cart_products/table?filter[cart.user_id]=1&page=".concat(currentPage, "&limit=").concat(perPage)).get();
+    }
+  }]);
+
+  return CartProductRepository;
 }(_BaseRepository__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 
@@ -6111,17 +6205,17 @@ var ProductRepository = /*#__PURE__*/function (_BaseRepository) {
   }, {
     key: "fetchProductsByTitle",
     value: function fetchProductsByTitle(value) {
-      return _models_Product__WEBPACK_IMPORTED_MODULE_1__["default"].custom("products?sort=".concat(value)).get();
+      return _models_Product__WEBPACK_IMPORTED_MODULE_1__["default"].custom("products?filter[current_price]=true&sort=".concat(value)).get();
     }
   }, {
     key: "fetchProductsByPrice",
     value: function fetchProductsByPrice(value) {
-      return _models_Product__WEBPACK_IMPORTED_MODULE_1__["default"].custom("products?sort=".concat(value)).get();
+      return _models_Product__WEBPACK_IMPORTED_MODULE_1__["default"].custom("products?filter[current_price]=true&sort=".concat(value)).get();
     }
   }, {
     key: "fetchProductByGenre",
     value: function fetchProductByGenre(genreIds) {
-      return _models_Product__WEBPACK_IMPORTED_MODULE_1__["default"].custom("products?filter[genre_id]=".concat(genreIds)).get();
+      return _models_Product__WEBPACK_IMPORTED_MODULE_1__["default"].custom("products?filter[current_price]=true&filter[genre_id]=".concat(genreIds)).get();
     }
   }, {
     key: "fetchTable",
@@ -6616,7 +6710,7 @@ var authorTransformer = /*#__PURE__*/function (_apiTransformer) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "cartProductTransformer": () => (/* binding */ cartProductTransformer)
+/* harmony export */   "default": () => (/* binding */ cartProductTransformer)
 /* harmony export */ });
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
@@ -6642,6 +6736,7 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
 
 
 
@@ -6664,13 +6759,16 @@ var cartProductTransformer = /*#__PURE__*/function (_apiTransformer) {
         "cartId": lodash__WEBPACK_IMPORTED_MODULE_0___default().get(item, 'cart_id', null),
         "productId": lodash__WEBPACK_IMPORTED_MODULE_0___default().get(item, 'product_id', null),
         "quantity": lodash__WEBPACK_IMPORTED_MODULE_0___default().get(item, 'quantity', null),
-        "product": lodash__WEBPACK_IMPORTED_MODULE_0___default().get(item, 'product', null)
+        "product": lodash__WEBPACK_IMPORTED_MODULE_0___default().get(item, 'product', null),
+        "cart": lodash__WEBPACK_IMPORTED_MODULE_0___default().get(item, 'cart', null)
       };
     }
   }]);
 
   return cartProductTransformer;
 }(_ApiTransformer__WEBPACK_IMPORTED_MODULE_1__["default"]);
+
+
 
 /***/ }),
 
@@ -6683,7 +6781,7 @@ var cartProductTransformer = /*#__PURE__*/function (_apiTransformer) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "cartTransformer": () => (/* binding */ cartTransformer)
+/* harmony export */   "default": () => (/* binding */ cartTransformer)
 /* harmony export */ });
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
@@ -6712,6 +6810,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
+
 var cartTransformer = /*#__PURE__*/function (_apiTransformer) {
   _inherits(cartTransformer, _apiTransformer);
 
@@ -6729,14 +6828,15 @@ var cartTransformer = /*#__PURE__*/function (_apiTransformer) {
       return {
         "id": lodash__WEBPACK_IMPORTED_MODULE_0___default().get(item, 'id', null),
         "userId": lodash__WEBPACK_IMPORTED_MODULE_0___default().get(item, 'user_id', null),
-        "user": lodash__WEBPACK_IMPORTED_MODULE_0___default().get(item, 'user', null),
-        "cartProducts": lodash__WEBPACK_IMPORTED_MODULE_0___default().get(item, 'cart_products', null)
+        "user": lodash__WEBPACK_IMPORTED_MODULE_0___default().get(item, 'user', null)
       };
     }
   }]);
 
   return cartTransformer;
 }(_ApiTransformer__WEBPACK_IMPORTED_MODULE_1__["default"]);
+
+
 
 /***/ }),
 
@@ -6800,11 +6900,6 @@ var currentPriceTransformer = /*#__PURE__*/function (_apiTransformer) {
         "startDate": lodash__WEBPACK_IMPORTED_MODULE_1___default().get(item, 'start_date', null),
         "endDate": lodash__WEBPACK_IMPORTED_MODULE_1___default().get(item, 'end_date', null)
       };
-    }
-  }, {
-    key: "transformToApiProduct",
-    value: function transformToApiProduct(item) {
-      return item.replace(/([A-Z])/g, "_$1").toLowerCase();
     }
   }]);
 
@@ -33845,10 +33940,10 @@ var render = function() {
       _vm._v(" "),
       _c("paginate", {
         attrs: {
-          clickHandler: _vm.changePage,
           containerClass: "pagination",
           "page-class": "page-item",
-          pageCount: _vm.totalPages
+          clickHandler: _vm.clickHandler,
+          pageCount: _vm.pageCount
         },
         model: {
           value: _vm.computedValue,
@@ -35485,7 +35580,14 @@ var render = function() {
       _c("prod-list"),
       _vm._v(" "),
       _c("app-paginator", {
-        attrs: { "per-page": _vm.perPage, "total-items": _vm.totalItems },
+        attrs: {
+          "per-page": _vm.perPage,
+          "total-items": _vm.totalItems,
+          "click-handler": _vm.changePage,
+          "page-count": _vm.totalPages,
+          "first-item": _vm.firstItem,
+          "last-item": _vm.lastItem
+        },
         model: {
           value: _vm.currentPage,
           callback: function($$v) {

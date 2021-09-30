@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\CartController;
-use App\Http\Controllers\CartProductsController;
+use App\Http\Controllers\CartProductController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductPriceController;
@@ -51,5 +51,6 @@ Route::get('/carts', [CartController::class, 'getAll']);
 Route::get('/carts/{id}', [CartController::class, 'getOne'])->where('id', '[0-9]+');
 
 /** Cart Products */
-Route::get('/cart_products', [CartProductsController::class, 'getAll']);
-Route::get('/cart_products/{id}', [CartProductsController::class, 'getOne'])->where('id', '[0-9]+');
+Route::get('/cart_products', [CartProductController::class, 'getAll']);
+Route::get('/cart_products/table', [CartProductController::class, 'getTable']);
+Route::get('/cart_products/{id}', [CartProductController::class, 'getOne'])->where('id', '[0-9]+');
