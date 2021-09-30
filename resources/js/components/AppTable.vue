@@ -41,6 +41,44 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss">
+
+$primary-color: #448aff;
+$gray-color: #f2f2f2;
+
+.table {
+    width: 100%;
+    box-shadow: 0 6px 10px -4px rgba(0, 0, 0, 0.15);
+}
+
+.arrow {
+    transition: all 0.2s;
+&.rotate {
+     transform: rotateY(90deg);
+ }
+}
+td,
+th {
+    padding: 10px;
+}
+
+tr:nth-child(even) {
+    background-color: $gray-color;
+}
+
+/** Click on products from cart */
+//tr:hover {
+//    background-color: #ddd;
+//    transition: background-color 0.2s ease-in;
+//    cursor: pointer;
+//}
+
+th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: $primary-color;
+    color: white;
+}
 
 </style>

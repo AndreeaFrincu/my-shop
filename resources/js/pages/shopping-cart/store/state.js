@@ -1,8 +1,7 @@
+import CartDataUtils from "../../../utils/CartDataUtils";
+
 export default {
-    cart: {
-        'userId': null,
-        'cartProducts': []
-    }
-
-
+    cart: CartDataUtils.createCartData(),
+    tableData: [],
+    cartProdLastId: 0
 }

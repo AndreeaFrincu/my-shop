@@ -5,9 +5,9 @@ import GenreRepository from "../../../repositories/GenreRepository";
 import state from "./state";
 import _ from "lodash";
 import productTransformer from "../../../transformers/ProductTransformer";
-import CurrentPriceUtils from "../../../utils/CurrentPriceUtils";
 import genreTransformer from "../../../transformers/GenreTransformer";
 import authorTransformer from "../../../transformers/AuthorTransformer";
+import currentPriceTransformer from "../../../transformers/CurrentPriceTransformer";
 
 export default{
     async loadProducts({commit}) {
@@ -22,7 +22,7 @@ export default{
 
         _.forEach(products, function (prod) {
             prod = productTransformer.transformFromApiProduct(prod)
-            prod.currentPrice = CurrentPriceUtils.useTransformFromApiCurrentPrice(prod.currentPrice)
+            prod.currentPrice = currentPriceTransformer.transformFromApiCurrentPrice(prod.currentPrice)
             prod.genre = genreTransformer.transformFromApiGenre(prod.genre)
             prod.author = authorTransformer.transformFromApiAuthor(prod.author)
             transformedProducts.push(prod)
@@ -51,7 +51,7 @@ export default{
 
             _.forEach(products, function (prod) {
                 prod = productTransformer.transformFromApiProduct(prod)
-                prod.currentPrice = CurrentPriceUtils.useTransformFromApiCurrentPrice(prod.currentPrice)
+                prod.currentPrice = currentPriceTransformer.transformFromApiCurrentPrice(prod.currentPrice)
                 prod.genre = genreTransformer.transformFromApiGenre(prod.genre)
                 prod.author = authorTransformer.transformFromApiAuthor(prod.author)
                 transformedProducts.push(prod)
@@ -67,7 +67,7 @@ export default{
 
             _.forEach(products, function (prod) {
                 prod = productTransformer.transformFromApiProduct(prod)
-                prod.currentPrice = CurrentPriceUtils.useTransformFromApiCurrentPrice(prod.currentPrice)
+                prod.currentPrice = currentPriceTransformer.transformFromApiCurrentPrice(prod.currentPrice)
                 prod.genre = genreTransformer.transformFromApiGenre(prod.genre)
                 prod.author = authorTransformer.transformFromApiAuthor(prod.author)
                 transformedProducts.push(prod)
@@ -88,7 +88,7 @@ export default{
 
         _.forEach(products, function (prod) {
             prod = productTransformer.transformFromApiProduct(prod)
-            prod.currentPrice = CurrentPriceUtils.useTransformFromApiCurrentPrice(prod.currentPrice)
+            prod.currentPrice = currentPriceTransformer.transformFromApiCurrentPrice(prod.currentPrice)
             prod.genre = genreTransformer.transformFromApiGenre(prod.genre)
             prod.author = authorTransformer.transformFromApiAuthor(prod.author)
             transformedProducts.push(prod)

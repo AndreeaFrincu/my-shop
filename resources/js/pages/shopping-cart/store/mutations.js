@@ -7,6 +7,13 @@ export default {
     setUserId(state, value) {
         state.cart.userId = value.userId
     },
+    setDataForCartTable(state, value) {
+        state.tableData = value
+    },
+    setProdLastId(state, value) {
+        state.cartProdLastId += value
+    },
+
     setItems(state, value) {
         //set on store with value
         state.itemsList = value
