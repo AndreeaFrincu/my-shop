@@ -9,12 +9,12 @@ import authorTransformer from "../../../transformers/AuthorTransformer";
 import genreTransformer from "../../../transformers/GenreTransformer";
 
 export default {
-    async loadCurrentUsersCart({commit}) {
+    async loadCurrentUsersCart({commit, state}) {
         let cart = await new CartRepository(new Cart())
-            .fetchOne(2)
+            .fetchOne(4)
 
         cart = cartTransformer.transformFromApiCart(cart)
-        console.log(cart)
+        // console.log(cart)
 
         commit('setUserId', cart)
 
@@ -30,8 +30,21 @@ export default {
             cartTransformed.push(product)
         })
 
-        console.log(cartTransformed)
+        // console.log(cartTransformed)
 
         commit('setProducts', cartTransformed)
+
+        let products = _.cloneDeep(cart.cartProducts)
+        products = _.map(products, function (product) {
+            commit('setProdLastId', 1)
+            return {
+                id: state.cartProdLastId,
+                title: product.product.title,
+                quantity: product.quantity,
+                price: product.product.currentPrice.price,
+            }
+        })
+        // console.log('final', products)
+        commit('setDataForCartTable', products)
     }
 }
